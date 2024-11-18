@@ -4,6 +4,7 @@ type TResponse<T> = {
   success: boolean;
   statusCode: number;
   message?: string;
+  
   meta?: {
     limit: number;
     page: number;
