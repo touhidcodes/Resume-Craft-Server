@@ -3,6 +3,7 @@ import cors from "cors";
 import router from "./app/routes";
 
 import { PrismaClient } from "@prisma/client";
+import { gobbleErrorHandler } from "./app/middlewears/globalErrorHandler";
 
 
 const app: Application = express();
@@ -19,4 +20,6 @@ app.get('/',(req: Request, res: Response) => {
 });
 app.use('/', router);
 
+// app.use(gobbleErrorHandler.gobbleError);
+// app.use(gobbleErrorHandler.notFound);
 export default app;
