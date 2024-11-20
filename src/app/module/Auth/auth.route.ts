@@ -4,6 +4,7 @@ import { authenticationControllers } from "./auth.controller";
 
 import validateRequest from "../../middlewears/validateRequest";
 import auth from "../../middlewears/auth";
+import { UserRole } from "@prisma/client";
 
 const router = express.Router();
 //login user route
@@ -14,7 +15,7 @@ router.post(
 );
 router.post(
   "/change-password",
-  auth(),
+  auth(UserRole.ADMIN,UserRole.USER),
   validateRequest(authenticationZodSchema.changePasswordZodSchema),
   authenticationControllers.changePassword
 );
