@@ -7,7 +7,7 @@ let server: Server;
 async function main() {
   try {
     server = app.listen(config.port, () => {
-      console.log(`Assignment 6 server is listening on port ${config.port}`);
+      console.log(`Resume Craft server is listening on port ${config.port}`);
     });
   } catch (error) {
     console.log(error);

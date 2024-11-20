@@ -1,7 +1,9 @@
 {
   "scripts": {
     "build": "tsc",
-    "dev": "tsnd ./src/server.ts",
+    "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
+    "postinstall": "prisma generate",
+    "generate": "npx prisma generate",
     "start": "node ./dist/server.js"
   },
   "dependencies": {
