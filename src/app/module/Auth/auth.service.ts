@@ -1,24 +1,27 @@
-import httpStatus from 'http-status';
-import { prisma } from '../../../app';
-import { TLoginUser } from './auth.interface';
-import bcrypt from 'bcrypt';
-import { createToken } from './auth.utils';
-import config from '../../config';
-import { JwtPayload } from 'jsonwebtoken';
-import { AppError } from '../../errors/appErrors';
+import httpStatus from "http-status";
+import { prisma } from "../../../app";
+import { TLoginUser } from "./auth.interface";
+import bcrypt from "bcrypt";
+import { createToken } from "./auth.utils";
+import config from "../../config";
+import { JwtPayload } from "jsonwebtoken";
+import { AppError } from "../../errors/appErrors";
 // login user service
 const loginUserIntoDB = async (payload: TLoginUser) => {
-  const userData = await prisma.user.findUniqueOrThrow({
+  const userData = await prisma.user.findFirst({
     where: {
-      email: payload.email,
+      OR: [{ email: payload.email }, { userName: payload.userName }],
     },
   });
+  if (!userData) {
+    throw new AppError(httpStatus.NOT_FOUND, "Invalid Email or User Name");
+  }
   const isPasswordMatched: boolean = await bcrypt.compare(
     payload.password,
-    userData.password,
+    userData.password
   );
   if (!isPasswordMatched) {
-    throw new AppError(httpStatus.FORBIDDEN, 'Incorrect password');
+    throw new AppError(httpStatus.FORBIDDEN, "Incorrect password");
   }
   const jwtPayload = {
     userId: userData.id,
@@ -29,27 +32,27 @@ const loginUserIntoDB = async (payload: TLoginUser) => {
   const accessToken = createToken(
     jwtPayload,
     config.jwt_access_secret as string,
-    config.jwt_access_expires_in as string,
+    config.jwt_access_expires_in as string
   );
   const refreshJwtPayload = {
     userId: userData.id,
   };
-//   const refreshToken = createToken(
-//     refreshJwtPayload,
-//     config.jwt_refresh_secret as string,
-//     config.jwt_refresh_expires_in as string,
-//   );
+  const refreshToken = createToken(
+    refreshJwtPayload,
+    config.jwt_refresh_secret as string,
+    config.jwt_refresh_expires_in as string
+  );
   return {
     accessToken,
-    // refreshToken,
+    refreshToken,
   };
 };
 const changePasswordIntoDB = async (
   decodeToken: JwtPayload,
-  payload: { oldPassword: string; newPassword: string; email: string },
+  payload: { oldPassword: string; newPassword: string; email: string }
 ) => {
   if (decodeToken.email !== payload.email) {
-    throw new AppError(httpStatus.FORBIDDEN, 'Invalid Email');
+    throw new AppError(httpStatus.FORBIDDEN, "Invalid Email");
   }
   const userData = await prisma.user.findUniqueOrThrow({
     where: {
@@ -58,14 +61,14 @@ const changePasswordIntoDB = async (
   });
   const isPasswordMatched: boolean = await bcrypt.compare(
     payload.oldPassword,
-    userData.password,
+    userData.password
   );
   if (!isPasswordMatched) {
-    throw new AppError(httpStatus.FORBIDDEN, 'Incorrect Password');
+    throw new AppError(httpStatus.FORBIDDEN, "Incorrect Password");
   }
   const hashedPassword = await bcrypt.hash(
     payload.newPassword,
-    Number(config.bcrypt_salt_rounds as string),
+    Number(config.bcrypt_salt_rounds as string)
   );
   await prisma.user.update({
     where: {

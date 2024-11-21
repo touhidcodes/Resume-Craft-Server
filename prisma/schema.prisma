@@ -44,7 +44,6 @@ model Template {
     templateId     String
     personalInfo   PersonalInfo
     profileSummary String
-    sections       Sections
     design         Design
     lastUpdated    DateTime        @updatedAt
     WorkExperience WorkExperience?
@@ -80,16 +79,6 @@ type Address {
     country String
 }
 
-type Sections {
-    workExperience String
-    education      String
-    skills         String
-    certifications String
-    projects       String
-    awards         String
-    languages      String
-    hobbies        String
-}
 
 type Design {
     font            String
