@@ -4,11 +4,219 @@
 // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
-generator client {
-  provider = "prisma-client-js"
+datasource db {
+    provider = "mongodb"
+    url      = env("DATABASE_URL")
 }
 
-datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+generator client {
+    provider = "prisma-client-js"
+}
+
+model User {
+    id        String     @id @default(auto()) @map("_id") @db.ObjectId
+    userName  String     @unique
+    email     String     @unique
+    password  String
+    role      UserRole
+    status    UserStatus @default(ACTIVE)
+    createdAt DateTime   @default(now())
+    updatedAt DateTime   @updatedAt
+    Template  Template[]
+
+    @@map("users")
+}
+
+enum UserRole {
+    ADMIN
+    USER
+}
+
+enum UserStatus {
+    ACTIVE
+    INACTIVE
+}
+
+model Template {
+    id             String          @id @default(auto()) @map("_id") @db.ObjectId
+    userId         String          @db.ObjectId
+    user           User            @relation(fields: [userId], references: [id])
+    templateId     String
+    personalInfo   PersonalInfo
+    profileSummary String
+    design         Design
+    lastUpdated    DateTime        @updatedAt
+    WorkExperience WorkExperience?
+    Education      Education?
+    Skill          Skill?
+    Certification  Certification?
+    Project        Project?
+    Award          Award?
+    Language       Language?
+    Hobby          Hobby?
+}
+
+type PersonalInfo {
+    fullName String
+    jobTitle String
+    contact  Contact
+    address  Address
+}
+
+type Contact {
+    email    String
+    phone    String
+    website  String
+    linkedin String
+    github   String
+}
+
+type Address {
+    street  String
+    city    String
+    state   String
+    zip     String
+    country String
+}
+
+
+type Design {
+    font            String
+    themeColor      String
+    backgroundColor String
+    sectionStyles   SectionStyles
+}
+
+type SectionStyles {
+    header Style
+    titles Style
+}
+
+type Style {
+    fontSize String
+    color    String
+}
+
+model WorkExperience {
+    id         String               @id @default(auto()) @map("_id") @db.ObjectId
+    templateId String               @unique @db.ObjectId
+    template   Template             @relation(fields: [templateId], references: [id])
+    type       String
+    title      String
+    items      WorkExperienceItem[]
+}
+
+type WorkExperienceItem {
+    companyName      String
+    jobTitle         String
+    startDate        DateTime
+    endDate          DateTime?
+    isCurrent        Boolean
+    location         String
+    responsibilities String[]
+}
+
+model Education {
+    id         String          @id @default(auto()) @map("_id") @db.ObjectId
+    templateId String          @unique @db.ObjectId
+    template   Template        @relation(fields: [templateId], references: [id])
+    type       String
+    title      String
+    items      EducationItem[]
+}
+
+type EducationItem {
+    institution String
+    degree      String
+    startDate   DateTime
+    endDate     DateTime
+    location    String
+    description String
+}
+
+model Skill {
+    id         String      @id @default(auto()) @map("_id") @db.ObjectId
+    templateId String      @unique @db.ObjectId
+    template   Template    @relation(fields: [templateId], references: [id])
+    type       String
+    title      String
+    items      SkillItem[]
+}
+
+type SkillItem {
+    category String
+    skills   String[]
+}
+
+model Certification {
+    id         String              @id @default(auto()) @map("_id") @db.ObjectId
+    templateId String              @unique @db.ObjectId
+    template   Template            @relation(fields: [templateId], references: [id])
+    type       String
+    title      String
+    items      CertificationItem[]
+}
+
+type CertificationItem {
+    name           String
+    issuer         String
+    issueDate      DateTime
+    expirationDate DateTime?
+    credentialId   String
+}
+
+model Project {
+    id         String        @id @default(auto()) @map("_id") @db.ObjectId
+    templateId String        @unique @db.ObjectId
+    template   Template      @relation(fields: [templateId], references: [id])
+    type       String
+    title      String
+    items      ProjectItem[]
+}
+
+type ProjectItem {
+    name         String
+    description  String
+    technologies String[]
+    role         String
+    link         String
+}
+
+model Award {
+    id         String      @id @default(auto()) @map("_id") @db.ObjectId
+    templateId String      @unique @db.ObjectId
+    template   Template    @relation(fields: [templateId], references: [id])
+    type       String
+    title      String
+    items      AwardItem[]
+}
+
+type AwardItem {
+    name         String
+    organization String
+    year         Int
+    description  String
+}
+
+model Language {
+    id         String         @id @default(auto()) @map("_id") @db.ObjectId
+    templateId String         @unique @db.ObjectId
+    template   Template       @relation(fields: [templateId], references: [id])
+    type       String
+    title      String
+    items      LanguageItem[]
+}
+
+type LanguageItem {
+    name        String
+    proficiency String
+}
+
+model Hobby {
+    id         String   @id @default(auto()) @map("_id") @db.ObjectId
+    templateId String   @unique @db.ObjectId
+    template   Template @relation(fields: [templateId], references: [id])
+    type       String
+    title      String
+    items      String[]
 }
