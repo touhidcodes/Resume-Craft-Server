@@ -13,6 +13,16 @@ const createUser = catchAsync(async (req, res) => {
     data: result,
   });
 });
+// register user controller
+const createUserByGoogle = catchAsync(async (req, res) => {
+  const result = await userService.createUserByGoogleIntoBD(req.body);
+  sendRes(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'User registered successfully',
+    data: result,
+  });
+});
 const createAdmin = catchAsync(async (req, res) => {
   const result = await userService.createAdminIntoDB(req.params.id);
   sendRes(res, {
@@ -64,6 +74,7 @@ const getAllUser = catchAsync(async (req, res) => {
 });
 
 export const userController = {
+    createUserByGoogle,
   createUser,
   createAdmin,
   updateUser,

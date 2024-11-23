@@ -1,28 +1,109 @@
-import { prisma } from "../../../app";
-import { JwtPayload } from "jsonwebtoken";
-import { User, UserRole, UserStatus } from "@prisma/client";
-import bcrypt from "bcrypt";
-import config from "../../config";
-import { createToken } from "../Auth/auth.utils";
+import { prisma } from '../../../app';
+import { JwtPayload } from 'jsonwebtoken';
+import { User, UserRole, UserStatus } from '@prisma/client';
+import bcrypt from 'bcrypt';
+import config from '../../config';
+import { AppError } from '../../errors/appErrors';
+import { createToken } from '../Auth/auth.utils';
+
+const createUserByGoogleIntoBD = async (userData: User) => {
+  const { password, ...restData } = userData;
+  const isUserExist = await prisma.user.findFirst({
+    where: {
+      OR: [{ email: userData.email }, { userName: userData.userName }],
+    },
+  });
+  if (!isUserExist) {
+    const hashedPassword = await bcrypt.hash(
+      password,
+      Number(config.bcrypt_salt_rounds as string)
+    );
+    const user = await prisma.user.create({
+      data: { ...restData, password: hashedPassword, role: UserRole.USER },
+      select: {
+        id: true,
+        userName: true,
+        email: true,
+        role: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+    const jwtPayLoad = {
+      userId: user?.id,
+      role: user?.role,
+      email: user?.email,
+    };
+    const accessToken = createToken(
+      jwtPayLoad,
+      config.jwt_access_secret as string,
+      config.jwt_access_expires_in as string
+    );
+    return {
+      user,
+      accessToken,
+    };
+  }
+
+  const jwtPayLoad = {
+    userId: isUserExist?.id,
+    role: isUserExist?.role,
+    email: isUserExist?.email,
+  };
+  const accessToken = createToken(
+    jwtPayLoad,
+    config.jwt_access_secret as string,
+    config.jwt_access_expires_in as string
+  );
+  return {
+    user: isUserExist,
+    accessToken,
+  };
+};
 
 // register user service
 const createUserIntoDB = async (userData: User) => {
   const { password, ...restData } = userData;
+  const isUserExist = await prisma.user.findFirst({
+    where: {
+      OR: [{ email: userData.email }, { userName: userData.userName }],
+    },
+  });
+  if (isUserExist) {
+    throw new AppError(
+      httpStatus.NOT_ACCEPTABLE,
+      'User already register please login'
+    );
+  }
   const hashedPassword = await bcrypt.hash(
     password,
     Number(config.bcrypt_salt_rounds as string)
   );
-  const result = await prisma.user.create({
+  const user = await prisma.user.create({
     data: { ...restData, password: hashedPassword, role: UserRole.USER },
     select: {
       id: true,
       userName: true,
+      role: true,
       email: true,
       createdAt: true,
       updatedAt: true,
     },
   });
-  return result;
+  const jwtPayLoad = {
+    userId: user?.id,
+    role: user?.role,
+    email: user?.email,
+  };
+  const accessToken = createToken(
+    jwtPayLoad,
+    config.jwt_access_secret as string,
+    config.jwt_access_expires_in as string
+  );
+  return {
+    user,
+    accessToken,
+  };
 };
 const createAdminIntoDB = async (id: string) => {
   await prisma.user.findUniqueOrThrow({
@@ -115,6 +196,7 @@ const getAllUserFromDB = async () => {
   return result;
 };
 export const userService = {
+  createUserByGoogleIntoBD,
   createUserIntoDB,
   getAllUserFromDB,
   createAdminIntoDB,

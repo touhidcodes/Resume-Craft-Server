@@ -2,11 +2,11 @@ import httpStatus from 'http-status';
 import { prisma } from '../../../app';
 import { TLoginUser } from './auth.interface';
 import bcrypt from 'bcrypt';
-import { createToken } from './auth.utils';
-
+import { createToken, verifyToken } from './auth.utils';
+import config from '../../config';
 import { JwtPayload } from 'jsonwebtoken';
 import { AppError } from '../../errors/appErrors';
-import config from '../../config';
+import { UserStatus } from '@prisma/client';
 // login user service
 const loginUserIntoDB = async (payload: TLoginUser) => {
   const userData = await prisma.user.findFirst({
@@ -79,7 +79,40 @@ const changePasswordIntoDB = async (
   });
   return null;
 };
+
+const refreshToken = async (token: string) => {
+  let decodedData;
+  try {
+    decodedData = verifyToken(token, config.jwt_refresh_secret as string);
+  } catch (err) {
+    throw new AppError(httpStatus.UNAUTHORIZED, 'You are not authorized!');
+  }
+
+  const userData = await prisma.user.findUniqueOrThrow({
+    where: {
+      email: decodedData.email,
+      status: UserStatus.ACTIVE,
+    },
+  });
+
+  const jwtPayload = {
+    userId: userData.id,
+    email: userData.email,
+    role: userData.role,
+  };
+
+  const accessToken = createToken(
+    jwtPayload,
+    config.jwt_access_secret as string,
+    config.jwt_access_expires_in as string
+  );
+
+  return {
+    accessToken,
+  };
+};
 export const authenticationServices = {
+  refreshToken,
   loginUserIntoDB,
   changePasswordIntoDB,
 };
