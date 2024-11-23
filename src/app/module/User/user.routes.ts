@@ -28,6 +28,12 @@ router.post(
   validateRequest(userValidation.createUserValidation),
   userController.createUser,
 );
+//register user route
+router.post(
+  '/register-google',
+  validateRequest(userValidation.createUserValidation),
+  userController.createUser,
+);
 router.post(
   '/register-admin/:id',
   auth(UserRole.ADMIN),

@@ -14,6 +14,10 @@ router.post(
   authenticationControllers.loginUser
 );
 router.post(
+    '/refresh-token',
+    authenticationControllers.refreshToken
+)
+router.post(
   "/change-password",
   auth(UserRole.ADMIN,UserRole.USER),
   validateRequest(authenticationZodSchema.changePasswordZodSchema),
