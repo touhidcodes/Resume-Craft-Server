@@ -1,6 +1,6 @@
-import jwt, { JwtPayload, Secret } from "jsonwebtoken";
+import jwt, { JwtPayload, Secret } from 'jsonwebtoken';
 
-export const createToken = (
+export const createToken = async (
   jwtPayload: { userId: string },
   secret: Secret,
   expiresIn: string
