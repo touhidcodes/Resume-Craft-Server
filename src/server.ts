@@ -1,6 +1,6 @@
-import { Server } from "http";
-import config from "./app/config";
-import app from "./app";
+import { Server } from 'http';
+import config from './app/config';
+import app from './app';
 
 let server: Server;
 
@@ -15,15 +15,15 @@ async function main() {
 }
 
 main();
-process.on("unhandledRejection", () => {
+process.on('unhandledRejection', () => {
   if (server) {
     server.close(() => {
-      console.log("unahandledRejection is detected , shutting down ...`, err");
+      console.log('unahandledRejection is detected , shutting down ...`, err');
       process.exit(1);
     });
   }
 });
-process.on("uncaughtException", () => {
-  console.log("uncaughtException");
+process.on('uncaughtException', () => {
+  console.log('uncaughtException');
   process.exit(1);
 });

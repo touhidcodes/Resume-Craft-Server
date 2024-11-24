@@ -79,7 +79,6 @@ type Address {
     country String
 }
 
-
 type Design {
     font            String
     themeColor      String
@@ -101,8 +100,8 @@ model WorkExperience {
     id         String               @id @default(auto()) @map("_id") @db.ObjectId
     templateId String               @unique @db.ObjectId
     template   Template             @relation(fields: [templateId], references: [id])
-    type       String
-    title      String
+    type       String               @default("experience")
+    title      String               @default("Work Experience")
     items      WorkExperienceItem[]
 }
 
@@ -120,8 +119,8 @@ model Education {
     id         String          @id @default(auto()) @map("_id") @db.ObjectId
     templateId String          @unique @db.ObjectId
     template   Template        @relation(fields: [templateId], references: [id])
-    type       String
-    title      String
+    type       String          @default("education")
+    title      String          @default("Educations")
     items      EducationItem[]
 }
 
@@ -138,8 +137,8 @@ model Skill {
     id         String      @id @default(auto()) @map("_id") @db.ObjectId
     templateId String      @unique @db.ObjectId
     template   Template    @relation(fields: [templateId], references: [id])
-    type       String
-    title      String
+    type       String      @default("skill")
+    title      String      @default("Skills")
     items      SkillItem[]
 }
 
@@ -152,8 +151,8 @@ model Certification {
     id         String              @id @default(auto()) @map("_id") @db.ObjectId
     templateId String              @unique @db.ObjectId
     template   Template            @relation(fields: [templateId], references: [id])
-    type       String
-    title      String
+    type       String              @default("certificate")
+    title      String              @default("Certification")
     items      CertificationItem[]
 }
 
@@ -169,8 +168,8 @@ model Project {
     id         String        @id @default(auto()) @map("_id") @db.ObjectId
     templateId String        @unique @db.ObjectId
     template   Template      @relation(fields: [templateId], references: [id])
-    type       String
-    title      String
+    type       String        @default("project")
+    title      String        @default("Projects")
     items      ProjectItem[]
 }
 
@@ -186,8 +185,8 @@ model Award {
     id         String      @id @default(auto()) @map("_id") @db.ObjectId
     templateId String      @unique @db.ObjectId
     template   Template    @relation(fields: [templateId], references: [id])
-    type       String
-    title      String
+    type       String      @default("award")
+    title      String      @default("Awards")
     items      AwardItem[]
 }
 
@@ -202,8 +201,8 @@ model Language {
     id         String         @id @default(auto()) @map("_id") @db.ObjectId
     templateId String         @unique @db.ObjectId
     template   Template       @relation(fields: [templateId], references: [id])
-    type       String
-    title      String
+    type       String         @default("language")
+    title      String         @default("Languages")
     items      LanguageItem[]
 }
 
@@ -216,7 +215,7 @@ model Hobby {
     id         String   @id @default(auto()) @map("_id") @db.ObjectId
     templateId String   @unique @db.ObjectId
     template   Template @relation(fields: [templateId], references: [id])
-    type       String
-    title      String
+    type       String   @default("hobby")
+    title      String   @default("Hobbies")
     items      String[]
 }

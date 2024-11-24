@@ -5,6 +5,7 @@ import router from './app/routes';
 import cookieParser from 'cookie-parser';
 import { PrismaClient } from '@prisma/client';
 import globalErrorHandler from './app/middlewares/globalErrorHandler';
+import httpStatus from 'http-status';
 
 const app: Application = express();
 export const prisma = new PrismaClient();
@@ -19,7 +20,7 @@ const corsOptions = {
   credentials: true,
 };
 
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
