@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 // Address Schema
 const AddressSchema = z.object({
@@ -59,8 +59,6 @@ const WorkExperienceItemSchema = z.object({
 
 // Work Experience Schema
 export const WorkExperienceSchema = z.object({
-  type: z.string().min(1),
-  title: z.string().min(1),
   items: z.array(WorkExperienceItemSchema),
 });
 
@@ -76,8 +74,6 @@ const EducationItemSchema = z.object({
 
 // Education Schema
 export const EducationSchema = z.object({
-  type: z.string().min(1),
-  title: z.string().min(1),
   items: z.array(EducationItemSchema),
 });
 
@@ -89,8 +85,6 @@ const SkillItemSchema = z.object({
 
 // Skill Schema
 export const SkillSchema = z.object({
-  type: z.string().min(1),
-  title: z.string().min(1),
   items: z.array(SkillItemSchema),
 });
 
@@ -105,8 +99,6 @@ const CertificationItemSchema = z.object({
 
 // Certification Schema
 export const CertificationSchema = z.object({
-  type: z.string().min(1),
-  title: z.string().min(1),
   items: z.array(CertificationItemSchema),
 });
 
@@ -121,8 +113,6 @@ const ProjectItemSchema = z.object({
 
 // Project Schema
 export const ProjectSchema = z.object({
-  type: z.string().min(1),
-  title: z.string().min(1),
   items: z.array(ProjectItemSchema),
 });
 
@@ -136,8 +126,6 @@ const AwardItemSchema = z.object({
 
 // Award Schema
 export const AwardSchema = z.object({
-  type: z.string().min(1),
-  title: z.string().min(1),
   items: z.array(AwardItemSchema),
 });
 
@@ -149,21 +137,16 @@ const LanguageItemSchema = z.object({
 
 // Language Schema
 export const LanguageSchema = z.object({
-  type: z.string().min(1),
-  title: z.string().min(1),
   items: z.array(LanguageItemSchema),
 });
 
 // Hobby Schema
 export const HobbySchema = z.object({
-  type: z.string().min(1),
-  title: z.string().min(1),
   items: z.array(z.string().min(1)),
 });
 
 // Template Schema
 export const TemplateSchema = z.object({
-  userId: z.string().min(1),
   templateId: z.string().min(1),
   personalInfo: PersonalInfoSchema,
   profileSummary: z.string().min(1),
