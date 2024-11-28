@@ -31,7 +31,7 @@ router.post(
 router.post(
   '/register-google',
   validateRequest(userValidation.createUserValidation),
-  userController.createUser
+  userController.createUserByGoogle
 );
 router.post(
   '/register-admin/:id',
