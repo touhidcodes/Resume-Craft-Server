@@ -9,14 +9,11 @@ const router = express.Router();
 //login user route
 router.post(
   '/create-template',
-  auth(UserRole.ADMIN, UserRole.USER),
+  auth(UserRole.ADMIN),
   validateRequest(CreateTemplateSchema),
   templateControllers.createTemplate
 );
-router.get(
-  '/template/:templateId',
-  auth(UserRole.ADMIN, UserRole.USER),
-  templateControllers.getTemplate
-);
+router.get('/template/:templateId', templateControllers.getATemplate);
+router.get('/templates', templateControllers.getAllTemplate);
 
 export const templateRoutes = router;
