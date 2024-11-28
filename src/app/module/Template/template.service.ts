@@ -8,9 +8,9 @@ import {
   Skill,
   Template,
   WorkExperience,
-} from "@prisma/client";
-import { prisma } from "../../../app";
-import { JwtPayload } from "jsonwebtoken";
+} from '@prisma/client';
+import { prisma } from '../../../app';
+import { JwtPayload } from 'jsonwebtoken';
 
 export const createTemplateIntoDB = async (
   {
@@ -69,7 +69,24 @@ export const createTemplateIntoDB = async (
       data: { ...languageData, templateId },
     });
 
-    return createdTemplate;
+    const fullTemplateData = await transactionClient.template.findUniqueOrThrow(
+      {
+        where: {
+          id: templateId,
+        },
+        include: {
+          WorkExperience: true,
+          Education: true,
+          Skill: true,
+          Project: true,
+          Certification: true,
+          Award: true,
+          Language: true,
+          Hobby: true,
+        },
+      }
+    );
+    return fullTemplateData;
   });
 
   return result;

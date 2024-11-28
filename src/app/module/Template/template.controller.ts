@@ -1,7 +1,7 @@
-import httpStatus from "http-status";
-import catchAsync from "../../shared/catchAsync";
-import { sendRes } from "../../shared/sendResponse";
-import { templateServices } from "./template.service";
+import httpStatus from 'http-status';
+import catchAsync from '../../shared/catchAsync';
+import { sendRes } from '../../shared/sendResponse';
+import { templateServices } from './template.service';
 
 const createTemplate = catchAsync(async (req, res) => {
   const result = await templateServices.createTemplateIntoDB(
@@ -11,7 +11,7 @@ const createTemplate = catchAsync(async (req, res) => {
   sendRes(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: "Template Created successfully",
+    message: 'Template Created successfully',
     data: result,
   });
 });
@@ -23,7 +23,7 @@ const getTemplate = catchAsync(async (req, res) => {
   sendRes(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: "Template Created successfully",
+    message: 'Template Created successfully',
     data: result,
   });
 });
@@ -32,4 +32,3 @@ export const templateControllers = {
   createTemplate,
   getTemplate,
 };
-
