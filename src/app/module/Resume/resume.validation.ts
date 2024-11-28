@@ -51,6 +51,15 @@ export const WorkExperienceSchema = z.object({
   location: z.string().min(1),
   responsibilities: z.array(z.string()),
 });
+export const UpdateWorkExperienceSchema = z.object({
+  companyName: z.string().min(1).optional(),
+  jobTitle: z.string().min(1).optional(),
+  startDate: z.string().datetime().optional(),
+  endDate: z.string().datetime().optional(),
+  isCurrent: z.boolean().optional(),
+  location: z.string().min(1).optional(),
+  responsibilities: z.array(z.string()).optional(),
+});
 
 // Education Schema
 export const EducationSchema = z.object({
@@ -60,6 +69,14 @@ export const EducationSchema = z.object({
   endDate: z.string().datetime(),
   location: z.string().min(1),
   description: z.string().min(1),
+});
+export const UpdateEducationSchema = z.object({
+  institution: z.string().min(1).optional(),
+  degree: z.string().min(1).optional(),
+  startDate: z.string().datetime().optional(),
+  endDate: z.string().datetime().optional(),
+  location: z.string().min(1).optional(),
+  description: z.string().min(1).optional(),
 });
 
 // Skill Schema
@@ -73,6 +90,13 @@ export const CertificationSchema = z.object({
   name: z.string().min(1),
   issuer: z.string().min(1),
   issueDate: z.string().datetime(),
+  expirationDate: z.string().datetime().optional(),
+  credentialId: z.string().min(1).optional(),
+});
+export const UpdateCertificationSchema = z.object({
+  name: z.string().min(1).optional(),
+  issuer: z.string().min(1).optional(),
+  issueDate: z.string().datetime().optional(),
   expirationDate: z.string().datetime().optional(),
   credentialId: z.string().min(1).optional(),
 });
@@ -92,6 +116,12 @@ export const AwardSchema = z.object({
   organization: z.string().min(1),
   year: z.number().int(),
   description: z.string().min(1),
+});
+export const UpdateAwardSchema = z.object({
+  name: z.string().min(1).optional(),
+  organization: z.string().min(1).optional(),
+  year: z.number().int().optional(),
+  description: z.string().min(1).optional(),
 });
 
 // Language Schema

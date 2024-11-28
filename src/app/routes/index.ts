@@ -1,8 +1,11 @@
 import { Router } from 'express';
-import { authRoutes } from '../module/Auth/auth.route';
+import { authRoutes } from '../module/Auth/auth.routes';
 import { userRoute } from '../module/User/user.routes';
-import { templateRoutes } from '../module/Template/template.route';
-
+import { templateRoutes } from '../module/Template/template.routes';
+import { resumeRoutes } from '../module/Resume/resume.routes';
+import { workExperienceRoutes } from '../module/WorkExperience/workExperience.routes';
+import { educationRoutes } from '../module/Education/education.routes';
+import { awardRoutes } from '../module/Award/award.routes';
 
 const router = Router();
 
@@ -14,6 +17,22 @@ const moduleRoutes: { path: string; route: Router }[] = [
   {
     path: '/user',
     route: userRoute,
+  },
+  {
+    path: '/resume',
+    route: resumeRoutes,
+  },
+  {
+    path: '/resume/work-experience',
+    route: workExperienceRoutes,
+  },
+  {
+    path: '/resume/education',
+    route: educationRoutes,
+  },
+  {
+    path: '/resume/award',
+    route: awardRoutes,
   },
   {
     path: '/template',

@@ -9,15 +9,15 @@ import { CreateResumeSchema } from './resume.validation';
 const router = express.Router();
 //login user route
 router.post(
-  '/create-template',
+  '/create-resume',
   auth(UserRole.ADMIN, UserRole.USER),
   validateRequest(CreateResumeSchema),
   resumeControllers.createResume
 );
 router.get(
-  '/template/:templateId',
+  '/resume/:resumeId',
   auth(UserRole.ADMIN, UserRole.USER),
   resumeControllers.getResume
 );
 
-export const templateRoutes = router;
+export const resumeRoutes = router;

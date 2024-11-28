@@ -3,14 +3,15 @@ import validateRequest from '../../middlewares/validateRequest';
 import auth from '../../middlewares/auth';
 import { UserRole } from '@prisma/client';
 import { templateControllers } from './template.controller';
-import { CreateTemplateSchema } from './template.validation';
+import { TemplateSchema } from './template.validation';
+
 
 const router = express.Router();
 //login user route
 router.post(
   '/create-template',
   auth(UserRole.ADMIN),
-  validateRequest(CreateTemplateSchema),
+  validateRequest(TemplateSchema),
   templateControllers.createTemplate
 );
 router.get('/template/:templateId', templateControllers.getATemplate);
