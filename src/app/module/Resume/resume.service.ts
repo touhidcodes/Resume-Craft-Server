@@ -83,7 +83,7 @@ export const createResumeIntoDB = async (
   return result;
 };
 const getResumeFromDB = async (id: string, userId: string) => {
-  const result = prisma.resume.findUniqueOrThrow({
+  const result = await prisma.resume.findUniqueOrThrow({
     where: {
       id,
       userId,

@@ -100,7 +100,7 @@ type Style {
     fontSize String
     color    String
 }
-
+// workExperience
 model WorkExperience {
     id               String    @id @default(auto()) @map("_id") @db.ObjectId
     resumeId         String    @db.ObjectId
