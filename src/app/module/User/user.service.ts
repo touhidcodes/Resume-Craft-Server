@@ -5,6 +5,7 @@ import bcrypt from 'bcrypt';
 import config from '../../config';
 import { AppError } from '../../errors/appErrors';
 import { createToken } from '../Auth/auth.utils';
+import httpStatus from 'http-status';
 
 const createUserByGoogleIntoBD = async (userData: User) => {
   const { password, ...restData } = userData;

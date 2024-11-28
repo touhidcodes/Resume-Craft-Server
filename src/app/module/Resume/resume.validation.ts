@@ -132,7 +132,7 @@ export const LanguageSchema = z.object({
 
 // Resume Schema
 export const ResumeSchema = z.object({
-  ResumeId: z.string().min(1),
+  templateId: z.string().min(1),
   personalInfo: PersonalInfoSchema,
   profileSummary: z.string().min(1),
   hobby: z.array(z.string().min(1)),
@@ -141,7 +141,7 @@ export const ResumeSchema = z.object({
 
 export const CreateResumeSchema = z.object({
   body: z.object({
-    ResumeData: ResumeSchema,
+    resumeData: ResumeSchema,
     workExperienceData: WorkExperienceSchema,
     educationData: EducationSchema,
     skillData: SkillSchema,
