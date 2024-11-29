@@ -22,7 +22,7 @@ model User {
     status    UserStatus @default(ACTIVE)
     createdAt DateTime   @default(now())
     updatedAt DateTime   @updatedAt
-    Template  Template[]
+    Resume    Resume[]
 
     @@map("users")
 }
@@ -38,37 +38,42 @@ enum UserStatus {
 }
 
 model Template {
-    id             String          @id @default(auto()) @map("_id") @db.ObjectId
-    userId         String          @db.ObjectId
-    user           User            @relation(fields: [userId], references: [id])
-    templateId     String
+    id     String   @id @default(auto()) @map("_id") @db.ObjectId
+    image  String
+    name   String
+    Resume Resume[]
+}
+
+model Resume {
+    id             String       @id @default(auto()) @map("_id") @db.ObjectId
+    userId         String       @db.ObjectId
+    user           User         @relation(fields: [userId], references: [id])
+    templateId     String       @db.ObjectId
+    template       Template     @relation(fields: [templateId], references: [id])
     personalInfo   PersonalInfo
     profileSummary String
     design         Design
-    lastUpdated    DateTime        @updatedAt
-    WorkExperience WorkExperience?
-    Education      Education?
-    Skill          Skill?
-    Certification  Certification?
-    Project        Project?
-    Award          Award?
-    Language       Language?
-    Hobby          Hobby?
+    hobby          String[]
+    lastUpdated    DateTime     @updatedAt
+
+    WorkExperience WorkExperience[]
+    Education      Education[]
+    Skill          Skill[]
+    Certification  Certification[]
+    Project        Project[]
+    Award    Award[]
+    Language Language[]
 }
 
 type PersonalInfo {
     fullName String
     jobTitle String
-    contact  Contact
-    address  Address
-}
-
-type Contact {
     email    String
     phone    String
     website  String
     linkedin String
     github   String
+    address  Address
 }
 
 type Address {
@@ -97,15 +102,9 @@ type Style {
 }
 
 model WorkExperience {
-    id         String               @id @default(auto()) @map("_id") @db.ObjectId
-    templateId String               @unique @db.ObjectId
-    template   Template             @relation(fields: [templateId], references: [id])
-    type       String               @default("experience")
-    title      String               @default("Work Experience")
-    items      WorkExperienceItem[]
-}
-
-type WorkExperienceItem {
+    id               String    @id @default(auto()) @map("_id") @db.ObjectId
+    resumeId         String    @db.ObjectId
+    resume           Resume    @relation(fields: [resumeId], references: [id])
     companyName      String
     jobTitle         String
     startDate        DateTime
@@ -116,15 +115,9 @@ type WorkExperienceItem {
 }
 
 model Education {
-    id         String          @id @default(auto()) @map("_id") @db.ObjectId
-    templateId String          @unique @db.ObjectId
-    template   Template        @relation(fields: [templateId], references: [id])
-    type       String          @default("education")
-    title      String          @default("Educations")
-    items      EducationItem[]
-}
-
-type EducationItem {
+    id          String   @id @default(auto()) @map("_id") @db.ObjectId
+    resumeId    String   @db.ObjectId
+    resume      Resume   @relation(fields: [resumeId], references: [id])
     institution String
     degree      String
     startDate   DateTime
@@ -134,29 +127,17 @@ type EducationItem {
 }
 
 model Skill {
-    id         String      @id @default(auto()) @map("_id") @db.ObjectId
-    templateId String      @unique @db.ObjectId
-    template   Template    @relation(fields: [templateId], references: [id])
-    type       String      @default("skill")
-    title      String      @default("Skills")
-    items      SkillItem[]
-}
-
-type SkillItem {
+    id       String   @id @default(auto()) @map("_id") @db.ObjectId
+    resumeId String   @db.ObjectId
+    resume   Resume   @relation(fields: [resumeId], references: [id])
     category String
     skills   String[]
 }
 
 model Certification {
-    id         String              @id @default(auto()) @map("_id") @db.ObjectId
-    templateId String              @unique @db.ObjectId
-    template   Template            @relation(fields: [templateId], references: [id])
-    type       String              @default("certificate")
-    title      String              @default("Certification")
-    items      CertificationItem[]
-}
-
-type CertificationItem {
+    id             String    @id @default(auto()) @map("_id") @db.ObjectId
+    resumeId       String    @db.ObjectId
+    resume         Resume    @relation(fields: [resumeId], references: [id])
     name           String
     issuer         String
     issueDate      DateTime
@@ -165,15 +146,9 @@ type CertificationItem {
 }
 
 model Project {
-    id         String        @id @default(auto()) @map("_id") @db.ObjectId
-    templateId String        @unique @db.ObjectId
-    template   Template      @relation(fields: [templateId], references: [id])
-    type       String        @default("project")
-    title      String        @default("Projects")
-    items      ProjectItem[]
-}
-
-type ProjectItem {
+    id           String   @id @default(auto()) @map("_id") @db.ObjectId
+    resumeId     String   @db.ObjectId
+    resume       Resume   @relation(fields: [resumeId], references: [id])
     name         String
     description  String
     technologies String[]
@@ -182,15 +157,9 @@ type ProjectItem {
 }
 
 model Award {
-    id         String      @id @default(auto()) @map("_id") @db.ObjectId
-    templateId String      @unique @db.ObjectId
-    template   Template    @relation(fields: [templateId], references: [id])
-    type       String      @default("award")
-    title      String      @default("Awards")
-    items      AwardItem[]
-}
-
-type AwardItem {
+    id           String @id @default(auto()) @map("_id") @db.ObjectId
+    resumeId     String @db.ObjectId
+    resume       Resume @relation(fields: [resumeId], references: [id])
     name         String
     organization String
     year         Int
@@ -198,24 +167,9 @@ type AwardItem {
 }
 
 model Language {
-    id         String         @id @default(auto()) @map("_id") @db.ObjectId
-    templateId String         @unique @db.ObjectId
-    template   Template       @relation(fields: [templateId], references: [id])
-    type       String         @default("language")
-    title      String         @default("Languages")
-    items      LanguageItem[]
-}
-
-type LanguageItem {
+    id          String @id @default(auto()) @map("_id") @db.ObjectId
+    resumeId    String @db.ObjectId
+    resume      Resume @relation(fields: [resumeId], references: [id])
     name        String
     proficiency String
-}
-
-model Hobby {
-    id         String   @id @default(auto()) @map("_id") @db.ObjectId
-    templateId String   @unique @db.ObjectId
-    template   Template @relation(fields: [templateId], references: [id])
-    type       String   @default("hobby")
-    title      String   @default("Hobbies")
-    items      String[]
 }

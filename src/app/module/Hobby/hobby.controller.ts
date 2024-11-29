@@ -7,11 +7,14 @@ const addHobbyItems = catchAsync(async (req, res) => {
   try {
     const { items } = req.body;
     const { hobbyId } = req.params;
- 
+
     if (!Array.isArray(items) || items.length === 0) {
-      return res
-        .status(400)
-        .json({ message: 'newItems should be a non-empty array.' });
+      return sendRes(res, {
+        statusCode: httpStatus.BAD_REQUEST,
+        success: true,
+        message: 'newItems should be a non-empty array.',
+        data: null,
+      });
     }
 
     const updatedHobby = await HobbyService.pushHobbyItems(hobbyId, items);
@@ -26,7 +29,7 @@ const addHobbyItems = catchAsync(async (req, res) => {
     sendRes(res, {
       statusCode: httpStatus.FORBIDDEN,
       success: true,
-      message: `${error.message}`,
+      message: `${error}`,
       data: null,
     });
   }

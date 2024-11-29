@@ -4,10 +4,7 @@ import { sendRes } from '../../shared/sendResponse';
 import { templateServices } from './template.service';
 
 const createTemplate = catchAsync(async (req, res) => {
-  const result = await templateServices.createTemplateIntoDB(
-    req.body,
-    req.user
-  );
+  const result = await templateServices.createTemplateIntoDB(req.body);
   sendRes(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -15,20 +12,29 @@ const createTemplate = catchAsync(async (req, res) => {
     data: result,
   });
 });
-const getTemplate = catchAsync(async (req, res) => {
-  const result = await templateServices.getTemplateFromDB(
-    req.params.templateId,
-    req.user.userId
+const getATemplate = catchAsync(async (req, res) => {
+  const result = await templateServices.getATemplateFromDB(
+    req.params.templateId
   );
   sendRes(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Template Created successfully',
+    message: 'Template found successfully',
+    data: result,
+  });
+});
+const getAllTemplate = catchAsync(async (req, res) => {
+  const result = await templateServices.getAllTemplateFromDB();
+  sendRes(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Template found successfully',
     data: result,
   });
 });
 
 export const templateControllers = {
   createTemplate,
-  getTemplate,
+  getATemplate,
+  getAllTemplate,
 };

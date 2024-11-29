@@ -1,7 +1,6 @@
 import { prisma } from '../../../app';
 
 const pushHobbyItems = async (hobbyId: string, newItems: string[]) => {
-  console.log(hobbyId);
   const hobby = await prisma.hobby.findUniqueOrThrow({
     where: { id: hobbyId },
   });
