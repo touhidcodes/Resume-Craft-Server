@@ -20,7 +20,28 @@ const getResume = catchAsync(async (req, res) => {
   sendRes(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Resume Created successfully',
+    message: 'Resume found successfully',
+    data: result,
+  });
+});
+const getAllUserResume = catchAsync(async (req, res) => {
+  const result = await resumeServices.geAllUserResumeFromDB(req.user.userId);
+  sendRes(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Resume found successfully',
+    data: result,
+  });
+});
+const updateResume = catchAsync(async (req, res) => {
+  const result = await resumeServices.updateResumeIntoDB(
+    req.params.id,
+    req.body
+  );
+  sendRes(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Resume update successfully',
     data: result,
   });
 });
@@ -28,4 +49,6 @@ const getResume = catchAsync(async (req, res) => {
 export const resumeControllers = {
   createResume,
   getResume,
+  getAllUserResume,
+  updateResume,
 };

@@ -43,6 +43,8 @@ const deleteAEducationFromDB = async (id: string) => {
   });
   return result;
 };
+
+
 export const educationServices = {
   createEducationIntoDB,
   updateEducationIntoDB,
