@@ -54,6 +54,7 @@ model Resume {
     profileSummary String
     design         Design
     hobby          String[]
+    language       Language[]
     lastUpdated    DateTime     @updatedAt
 
     WorkExperience WorkExperience[]
@@ -61,8 +62,7 @@ model Resume {
     Skill          Skill[]
     Certification  Certification[]
     Project        Project[]
-    Award    Award[]
-    Language Language[]
+    Award          Award[]
 }
 
 type PersonalInfo {
@@ -73,15 +73,12 @@ type PersonalInfo {
     website  String
     linkedin String
     github   String
-    address  Address
+    location String
 }
 
-type Address {
-    street  String
-    city    String
-    state   String
-    zip     String
-    country String
+type Language {
+    name        String
+    proficiency String
 }
 
 type Design {
@@ -101,6 +98,7 @@ type Style {
     color    String
 }
 
+// workExperience
 model WorkExperience {
     id               String    @id @default(auto()) @map("_id") @db.ObjectId
     resumeId         String    @db.ObjectId
@@ -109,21 +107,20 @@ model WorkExperience {
     jobTitle         String
     startDate        DateTime
     endDate          DateTime?
-    isCurrent        Boolean
     location         String
     responsibilities String[]
 }
 
 model Education {
-    id          String   @id @default(auto()) @map("_id") @db.ObjectId
-    resumeId    String   @db.ObjectId
-    resume      Resume   @relation(fields: [resumeId], references: [id])
+    id          String    @id @default(auto()) @map("_id") @db.ObjectId
+    resumeId    String    @db.ObjectId
+    resume      Resume    @relation(fields: [resumeId], references: [id])
     institution String
     degree      String
     startDate   DateTime
-    endDate     DateTime
+    endDate     DateTime?
     location    String
-    description String
+    description String?
 }
 
 model Skill {
@@ -135,14 +132,14 @@ model Skill {
 }
 
 model Certification {
-    id             String    @id @default(auto()) @map("_id") @db.ObjectId
-    resumeId       String    @db.ObjectId
-    resume         Resume    @relation(fields: [resumeId], references: [id])
-    name           String
-    issuer         String
-    issueDate      DateTime
-    expirationDate DateTime?
-    credentialId   String
+    id              String    @id @default(auto()) @map("_id") @db.ObjectId
+    resumeId        String    @db.ObjectId
+    resume          Resume    @relation(fields: [resumeId], references: [id])
+    name            String
+    issuer          String
+    issueDate       DateTime
+    expirationDate  DateTime?
+    certificateLink String?
 }
 
 model Project {
@@ -150,26 +147,18 @@ model Project {
     resumeId     String   @db.ObjectId
     resume       Resume   @relation(fields: [resumeId], references: [id])
     name         String
-    description  String
+    description  String?
     technologies String[]
     role         String
     link         String
 }
 
 model Award {
-    id           String @id @default(auto()) @map("_id") @db.ObjectId
-    resumeId     String @db.ObjectId
-    resume       Resume @relation(fields: [resumeId], references: [id])
+    id           String  @id @default(auto()) @map("_id") @db.ObjectId
+    resumeId     String  @db.ObjectId
+    resume       Resume  @relation(fields: [resumeId], references: [id])
     name         String
     organization String
     year         Int
-    description  String
-}
-
-model Language {
-    id          String @id @default(auto()) @map("_id") @db.ObjectId
-    resumeId    String @db.ObjectId
-    resume      Resume @relation(fields: [resumeId], references: [id])
-    name        String
-    proficiency String
+    description  String?
 }

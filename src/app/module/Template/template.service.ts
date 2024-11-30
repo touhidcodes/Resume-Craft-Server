@@ -2,11 +2,11 @@ import { Template } from '@prisma/client';
 import { prisma } from '../../../app';
 
 const createTemplateIntoDB = async (template: Template) => {
-  const result = prisma.template.create({ data: template });
+  const result = await prisma.template.create({ data: template });
   return result;
 };
 const getATemplateFromDB = async (id: string) => {
-  const result = prisma.template.findUniqueOrThrow({
+  const result = await prisma.template.findUniqueOrThrow({
     where: {
       id,
     },
@@ -14,7 +14,7 @@ const getATemplateFromDB = async (id: string) => {
   return result;
 };
 const getAllTemplateFromDB = async () => {
-  const result = prisma.template.findMany({});
+  const result = await prisma.template.findMany({});
   return result;
 };
 export const templateServices = {

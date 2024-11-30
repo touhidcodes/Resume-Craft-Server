@@ -4,13 +4,13 @@ import { HobbyController } from './hobby.controller';
 import express from 'express';
 const router = express.Router();
 router.put(
-  '/add/:hobbyId',
+  '/add/:resumeId',
   auth(UserRole.USER),
 
   HobbyController.addHobbyItems
 );
 router.delete(
-  '/remove/:hobbyId',
+  '/remove/:resumeId',
   auth(UserRole.USER),
 
   HobbyController.removeSpecificHobbyItem

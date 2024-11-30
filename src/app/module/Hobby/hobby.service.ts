@@ -1,37 +1,49 @@
 import { prisma } from '../../../app';
 
-const pushHobbyItems = async (hobbyId: string, newItems: string[]) => {
-  const hobby = await prisma.hobby.findUniqueOrThrow({
-    where: { id: hobbyId },
+const pushHobbyItems = async (
+  userId: string,
+  resumeId: string,
+  newItems: string[]
+) => {
+  const resume = await prisma.resume.findFirstOrThrow({
+    where: { id: resumeId, userId },
   });
-  const updatedItems = [...hobby.items, ...newItems];
 
-  return prisma.hobby.update({
-    where: { id: hobbyId },
-    data: { items: updatedItems },
+  const updatedHobbies = [...resume.hobby, ...newItems];
+
+  const result = await prisma.resume.update({
+    where: { id: resumeId },
+    data: { hobby: updatedHobbies },
   });
+  return result;
 };
 
-const popSpecificHobbyItem = async (hobbyId: string, itemToRemove: string) => {
-  const hobby = await prisma.hobby.findUniqueOrThrow({
-    where: { id: hobbyId },
+const popSpecificHobbyItem = async (
+  userId: string,
+  resumeId: string,
+  itemToRemove: string
+) => {
+  const resume = await prisma.resume.findFirstOrThrow({
+    where: { id: resumeId, userId },
   });
 
-  const itemIndex = hobby.items.indexOf(itemToRemove);
+  const itemIndex = resume.hobby.indexOf(itemToRemove);
 
   if (itemIndex === -1) {
-    throw new Error(`Item "${itemToRemove}" not found.`);
+    throw new Error(`Hobby "${itemToRemove}" not found.`);
   }
 
-  const updatedItems = [
-    ...hobby.items.slice(0, itemIndex),
-    ...hobby.items.slice(itemIndex + 1),
+  const updatedHobbies = [
+    ...resume.hobby.slice(0, itemIndex),
+    ...resume.hobby.slice(itemIndex + 1),
   ];
 
-  return prisma.hobby.update({
-    where: { id: hobbyId },
-    data: { items: updatedItems },
+
+  const result = await prisma.resume.update({
+    where: { id: resumeId },
+    data: { hobby: updatedHobbies },
   });
+  return result;
 };
 
 export const HobbyService = {

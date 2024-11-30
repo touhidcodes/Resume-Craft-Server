@@ -5,6 +5,7 @@ import bcrypt from 'bcrypt';
 import config from '../../config';
 import { AppError } from '../../errors/appErrors';
 import { createToken } from '../Auth/auth.utils';
+import httpStatus from 'http-status';
 
 const createUserByGoogleIntoBD = async (userData: User) => {
   const { password, ...restData } = userData;
@@ -39,9 +40,19 @@ const createUserByGoogleIntoBD = async (userData: User) => {
       config.jwt_access_secret as string,
       config.jwt_access_expires_in as string
     );
+    const refreshJwtPayload = {
+      userId: userData.id,
+    };
+    const refreshToken = createToken(
+      refreshJwtPayload,
+      config.jwt_refresh_secret as string,
+      config.jwt_refresh_expires_in as string
+    );
     return {
+      massage: 'User registered successfully',
       user,
       accessToken,
+      refreshToken
     };
   }
 
@@ -55,9 +66,19 @@ const createUserByGoogleIntoBD = async (userData: User) => {
     config.jwt_access_secret as string,
     config.jwt_access_expires_in as string
   );
+  const refreshJwtPayload = {
+    userId: userData.id,
+  };
+  const refreshToken = createToken(
+    refreshJwtPayload,
+    config.jwt_refresh_secret as string,
+    config.jwt_refresh_expires_in as string
+  );
   return {
+    massage: 'User login successfully',
     user: isUserExist,
     accessToken,
+    refreshToken,
   };
 };
 

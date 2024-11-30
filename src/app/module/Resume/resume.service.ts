@@ -2,7 +2,6 @@ import {
   Award,
   Certification,
   Education,
-  Language,
   Project,
   Resume,
   Skill,
@@ -20,7 +19,6 @@ export const createResumeIntoDB = async (
     certificationData,
     projectData,
     awardData,
-    languageData,
   }: {
     resumeData: Resume;
     workExperienceData: WorkExperience;
@@ -29,7 +27,6 @@ export const createResumeIntoDB = async (
     certificationData: Certification;
     projectData: Project;
     awardData: Award;
-    languageData: Language;
   },
   decodeToken: JwtPayload
 ) => {
@@ -59,10 +56,6 @@ export const createResumeIntoDB = async (
     await transactionClient.award.create({
       data: { ...awardData, resumeId },
     });
-    await transactionClient.language.create({
-      data: { ...languageData, resumeId },
-    });
-
     const fullResumeData = await transactionClient.resume.findUniqueOrThrow({
       where: {
         id: resumeId,
@@ -74,7 +67,6 @@ export const createResumeIntoDB = async (
         Project: true,
         Certification: true,
         Award: true,
-        Language: true,
       },
     });
     return fullResumeData;
@@ -95,12 +87,83 @@ const getResumeFromDB = async (id: string, userId: string) => {
       Project: true,
       Certification: true,
       Award: true,
-      Language: true,
     },
+  });
+  return result;
+};
+const geAllUserResumeFromDB = async (userId: string) => {
+  const result = await prisma.resume.findMany({
+    where: {
+      userId,
+    },
+    include: {
+      WorkExperience: true,
+      Education: true,
+      Skill: true,
+      Project: true,
+      Certification: true,
+      Award: true,
+    },
+  });
+  return result;
+};
+const updateResumeIntoDB = async (
+  id: string,
+  resumeUpdateData: Partial<Resume>
+) => {
+  const resumeData = await prisma.resume.findUniqueOrThrow({
+    where: {
+      id,
+    },
+  });
+  const { design, personalInfo, ...remainingResumeData } = resumeUpdateData;
+
+  const modifiedUpdatedData = {
+    ...remainingResumeData,
+    personalInfo: resumeData.personalInfo,
+    design: resumeData.design,
+  };
+  if (personalInfo && Object.keys(personalInfo).length) {
+    for (const [key, value] of Object.entries(personalInfo)) {
+      modifiedUpdatedData.personalInfo[`${key as keyof typeof personalInfo}`] =
+        value;
+    }
+  }
+  if (design && Object.keys(design).length) {
+    const { sectionStyles, ...remainingDesignData } = design;
+
+    for (const [key, value] of Object.entries(remainingDesignData)) {
+      modifiedUpdatedData.design[`${key as keyof typeof remainingDesignData}`] =
+        value;
+    }
+    if (sectionStyles && Object.keys(sectionStyles).length) {
+      const { header, titles } = sectionStyles;
+      if (header && Object.keys(header).length) {
+        for (const [key, value] of Object.entries(header)) {
+          modifiedUpdatedData.design.sectionStyles.header[
+            `${key as keyof typeof header}`
+          ] = value;
+        }
+      }
+      if (titles && Object.keys(titles).length) {
+        for (const [key, value] of Object.entries(titles)) {
+          modifiedUpdatedData.design.sectionStyles.header[
+            `${key as keyof typeof titles}`
+          ] = value;
+        }
+      }
+    }
+  }
+
+  const result = await prisma.resume.update({
+    where: { id },
+    data: modifiedUpdatedData,
   });
   return result;
 };
 export const resumeServices = {
   createResumeIntoDB,
   getResumeFromDB,
+  geAllUserResumeFromDB,
+  updateResumeIntoDB,
 };

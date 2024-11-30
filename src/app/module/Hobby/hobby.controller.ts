@@ -4,66 +4,81 @@ import { sendRes } from '../../shared/sendResponse';
 import { HobbyService } from './hobby.service';
 
 const addHobbyItems = catchAsync(async (req, res) => {
-  try {
-    const { items } = req.body;
-    const { hobbyId } = req.params;
+  const { hobby } = req.body;
+  const { resumeId } = req.params;
+  const userId = req.user.userId;
 
-    if (!Array.isArray(items) || items.length === 0) {
-      return sendRes(res, {
-        statusCode: httpStatus.BAD_REQUEST,
-        success: true,
-        message: 'newItems should be a non-empty array.',
-        data: null,
-      });
-    }
-
-    const updatedHobby = await HobbyService.pushHobbyItems(hobbyId, items);
-
-    sendRes(res, {
-      statusCode: httpStatus.OK,
-      success: true,
-      message: 'Hobby added successfully!',
-      data: updatedHobby,
-    });
-  } catch (error) {
-    sendRes(res, {
-      statusCode: httpStatus.FORBIDDEN,
-      success: true,
-      message: `${error}`,
+  // Validate input
+  if (!userId) {
+    return sendRes(res, {
+      statusCode: httpStatus.BAD_REQUEST,
+      success: false,
+      message: 'User ID is required.',
       data: null,
     });
   }
+  if (!Array.isArray(hobby) || hobby.length === 0) {
+    return sendRes(res, {
+      statusCode: httpStatus.BAD_REQUEST,
+      success: false,
+      message: 'Items should be a non-empty array.',
+      data: null,
+    });
+  }
+
+  // Add hobbies to the resume
+  const updatedResume = await HobbyService.pushHobbyItems(
+    userId as string,
+    resumeId,
+    hobby
+  );
+
+  sendRes(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Hobbies added successfully!',
+    data: updatedResume, // Return full resume data
+  });
 });
 
-// Pop a specific hobby item
 const removeSpecificHobbyItem = catchAsync(async (req, res) => {
-  try {
-    const { items } = req.body;
-    const { hobbyId } = req.params;
+  const { hobby } = req.body;
+  const { resumeId } = req.params;
+  const userId = req.user.userId;
 
-    if (!items) {
-      return res.status(400).json({ message: 'Item to remove is required.' });
-    }
-
-    const updatedHobby = await HobbyService.popSpecificHobbyItem(
-      hobbyId,
-      items
-    );
-    sendRes(res, {
-      statusCode: httpStatus.OK,
-      success: true,
-      message: `"${items}" removed successfully`,
-      data: updatedHobby,
-    });
-  } catch (error) {
-    sendRes(res, {
-      statusCode: httpStatus.FORBIDDEN,
-      success: true,
-      message: `${error.message}`,
+  // Validate input
+  if (!userId) {
+    return sendRes(res, {
+      statusCode: httpStatus.BAD_REQUEST,
+      success: false,
+      message: 'User ID is required.',
       data: null,
     });
   }
+  if (!hobby) {
+    return sendRes(res, {
+      statusCode: httpStatus.BAD_REQUEST,
+      success: false,
+      message: 'Item to remove is required.',
+      data: null,
+    });
+  }
+
+  // Remove the specific hobby item
+  const updatedResume = await HobbyService.popSpecificHobbyItem(
+    userId as string,
+    resumeId,
+    hobby
+  );
+
+  sendRes(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: `"${hobby}" removed successfully.`,
+    data: updatedResume, // Return full resume data
+  });
 });
+
 export const HobbyController = {
   addHobbyItems,
   removeSpecificHobbyItem,

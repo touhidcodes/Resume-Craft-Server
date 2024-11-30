@@ -1,17 +1,25 @@
 import { UserRole } from '@prisma/client';
 import auth from '../../middlewares/auth';
 import express from 'express';
-
-import { skillControllers } from './skills.controller';
+import { SkillControllers } from './skills.controller';
 
 const router = express.Router();
 
-router.put('/push/:skillId', auth(UserRole.USER), skillControllers.addSkills);
+router.put(
+  '/push/:resumeId',
+  auth(UserRole.USER),
+  SkillControllers.addOrUpdateSkillCategory
+);
 
-router.delete(
+router.put(
   '/remove/:skillId',
   auth(UserRole.USER),
-  skillControllers.removeSkills
+  SkillControllers.removeSpecificSkill
+);
+
+router.delete(
+  '/remove-category/:skillId',
+  SkillControllers.deleteSkillCategoryFromDB
 );
 
 export const skillRoutes = router;
