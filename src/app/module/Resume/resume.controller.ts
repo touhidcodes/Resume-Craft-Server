@@ -14,7 +14,7 @@ const createResume = catchAsync(async (req, res) => {
 });
 const getResume = catchAsync(async (req, res) => {
   const result = await resumeServices.getResumeFromDB(
-    req.params.ResumeId,
+    req.params.resumeId,
     req.user.userId
   );
   sendRes(res, {

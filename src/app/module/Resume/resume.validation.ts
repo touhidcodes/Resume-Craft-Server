@@ -146,7 +146,14 @@ const UpdateLanguageSchema = z.object({
   name: z.string().min(1).optional(),
   proficiency: z.string().min(1).optional(),
 });
-
+const SectionSchema = z.object({
+  name: z.string(),
+  isActive: z.boolean(),
+});
+const UpdateSectionSchema = z.object({
+  name: z.string().optional(),
+  isActive: z.boolean().optional(),
+});
 // Resume Schema
 export const ResumeSchema = z.object({
   templateId: z.string().min(1),
@@ -155,6 +162,7 @@ export const ResumeSchema = z.object({
   hobby: z.array(z.string().min(1)),
   design: DesignSchema,
   language: z.array(LanguageSchema),
+  allSection: z.array(SectionSchema),
 });
 export const UpdateResumeSchema = z.object({
   personalInfo: UpdatePersonalInfoSchema.optional(),
@@ -162,6 +170,7 @@ export const UpdateResumeSchema = z.object({
   hobby: z.array(z.string().min(1)).optional(),
   design: UpdateDesignSchema.optional(),
   language: z.array(UpdateLanguageSchema).optional(),
+  allSection: z.array(UpdateSectionSchema).optional(),
 });
 
 export const CreateResumeSchema = z.object({

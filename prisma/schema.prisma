@@ -55,6 +55,7 @@ model Resume {
     design         Design
     hobby          String[]
     language       Language[]
+    allSection     Section[] 
     lastUpdated    DateTime     @updatedAt
 
     WorkExperience WorkExperience[]
@@ -63,6 +64,11 @@ model Resume {
     Certification  Certification[]
     Project        Project[]
     Award          Award[]
+}
+
+type Section {
+    name     String
+    isActive Boolean
 }
 
 type PersonalInfo {
