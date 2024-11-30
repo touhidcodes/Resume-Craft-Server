@@ -8,7 +8,7 @@ const createResume = catchAsync(async (req, res) => {
   sendRes(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Resume Created successfully',
+    message: 'Resume created successfully',
     data: result,
   });
 });
@@ -20,7 +20,7 @@ const getResume = catchAsync(async (req, res) => {
   sendRes(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Resume found successfully',
+    message: 'Resume retrieved successfully',
     data: result,
   });
 });
@@ -29,7 +29,7 @@ const getAllUserResume = catchAsync(async (req, res) => {
   sendRes(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Resume found successfully',
+    message: 'Resume retrieved successfully',
     data: result,
   });
 });
@@ -41,7 +41,7 @@ const updateResume = catchAsync(async (req, res) => {
   sendRes(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Resume update successfully',
+    message: 'Resume updated successfully',
     data: result,
   });
 });
