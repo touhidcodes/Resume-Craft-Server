@@ -108,7 +108,7 @@ model WorkExperience {
     startDate        DateTime
     endDate          DateTime?
     location         String
-    responsibilities String[]
+    responsibilities String?
 }
 
 model Education {

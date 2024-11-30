@@ -63,7 +63,7 @@ export const WorkExperienceSchema = z.object({
   startDate: z.string().datetime(),
   endDate: z.string().datetime().optional(),
   location: z.string().min(1),
-  responsibilities: z.array(z.string()),
+  responsibilities: z.string(),
 });
 export const UpdateWorkExperienceSchema = z.object({
   companyName: z.string().min(1).optional(),
@@ -71,7 +71,7 @@ export const UpdateWorkExperienceSchema = z.object({
   startDate: z.string().datetime().optional(),
   endDate: z.string().datetime().optional(),
   location: z.string().min(1).optional(),
-  responsibilities: z.array(z.string()).optional(),
+  responsibilities: z.string().optional(),
 });
 
 // Education Schema
