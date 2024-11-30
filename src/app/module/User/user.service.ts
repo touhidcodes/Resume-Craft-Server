@@ -34,7 +34,7 @@ const createUserByGoogleIntoBD = async (userData: User) => {
       role: user?.role,
       email: user?.email,
     };
-    const accessToken = createToken(
+    const accessToken = await createToken(
       jwtPayLoad,
       config.jwt_access_secret as string,
       config.jwt_access_expires_in as string
@@ -50,11 +50,12 @@ const createUserByGoogleIntoBD = async (userData: User) => {
     role: isUserExist?.role,
     email: isUserExist?.email,
   };
-  const accessToken = createToken(
+  const accessToken = await createToken(
     jwtPayLoad,
     config.jwt_access_secret as string,
     config.jwt_access_expires_in as string
   );
+  console.log(accessToken, isUserExist);
   return {
     user: isUserExist,
     accessToken,
