@@ -2,10 +2,19 @@ import { z } from 'zod';
 
 const loginUserZodSchema = z.object({
   body: z.object({
-    identifier: z.string({
-      invalid_type_error: 'userName must be a string',
-      required_error: 'userName is required',
-    }),
+    email: z
+      .string({
+        invalid_type_error: 'Email must be a string',
+        required_error: 'Email is required',
+      })
+      .email()
+      .optional(),
+    userName: z
+      .string({
+        invalid_type_error: 'userName must be a string',
+        required_error: 'userName is required',
+      })
+      .optional(),
     password: z.string({
       invalid_type_error: 'Name must be a string',
       required_error: 'name is required',

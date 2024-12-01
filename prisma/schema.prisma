@@ -23,6 +23,7 @@ model User {
     createdAt DateTime   @default(now())
     updatedAt DateTime   @updatedAt
     Resume    Resume[]
+
     @@map("users")
 }
 
@@ -53,20 +54,15 @@ model Resume {
     profileSummary String
     design         Design
     hobby          String[]
-    language   Language[]
-    allSection Section[]
-    lastUpdated DateTime @updatedAt
+    language       Language[]
+    lastUpdated    DateTime     @updatedAt
+
     WorkExperience WorkExperience[]
     Education      Education[]
     Skill          Skill[]
     Certification  Certification[]
     Project        Project[]
     Award          Award[]
-}
-
-type Section {
-    name     String
-    isActive Boolean
 }
 
 type PersonalInfo {
@@ -112,7 +108,7 @@ model WorkExperience {
     startDate        DateTime
     endDate          DateTime?
     location         String
-    responsibilities String?
+    responsibilities String[]
 }
 
 model Education {

@@ -1,86 +1,73 @@
 import { prisma } from '../../../app';
-import { AppError } from '../../errors/appErrors';
-import httpStatus from 'http-status';
-const addSkills = async (
-  skillId: string,
+
+const addOrUpdateSkillCategory = async (
+  resumeId: string,
   category: string,
   newSkills: string[]
 ) => {
-  const skill = await prisma.skill.findUniqueOrThrow({
-    where: { id: skillId },
+  // Find the existing skill category for this resume
+  const existingSkill = await prisma.skill.findFirst({
+    where: { resumeId, category },
   });
 
-  const updatedItems = skill.items.map((item) => {
-    if (item.category === category) {
-      const existingSkills = new Set(item.skills);
-      const duplicateSkills = newSkills.filter((skill) =>
-        existingSkills.has(skill)
-      );
+  if (existingSkill) {
+    // Merge new skills with the existing skills, avoiding duplicates
+    const updatedSkills = Array.from(
+      new Set([...existingSkill.skills, ...newSkills])
+    );
 
-      if (duplicateSkills.length > 0) {
-        throw new AppError(
-          httpStatus.BAD_REQUEST,
-          `Some skills already exist in category "${category}": ${duplicateSkills.join(
-            ', '
-          )}.`
-        );
-      }
+    // Update the skills array in the database
+    const result = await prisma.skill.update({
+      where: { id: existingSkill.id },
+      data: { skills: updatedSkills },
+    });
+    return result;
+  }
 
-      return {
-        ...item,
-        skills: [...item.skills, ...newSkills], // Add new skills
-      };
-    }
-    return item;
-  });
-
-  return prisma.skill.update({
-    where: { id: skillId },
-    data: { items: updatedItems },
+  // If the category does not exist, create a new one
+  return prisma.skill.create({
+    data: {
+      resumeId,
+      category,
+      skills: newSkills,
+    },
   });
 };
 
-// Remove multiple skills from a category
-const removeSkills = async (
+const removeSpecificSkill = async (
   skillId: string,
-  category: string,
+
   skillsToRemove: string[]
 ) => {
-  const skill = await prisma.skill.findUniqueOrThrow({
+  const existingSkill = await prisma.skill.findFirst({
     where: { id: skillId },
   });
 
-  const updatedItems = skill.items.map((item) => {
-    if (item.category === category) {
-      const existingSkills = new Set(item.skills);
-      const missingSkills = skillsToRemove.filter(
-        (skill) => !existingSkills.has(skill)
-      );
+  if (!existingSkill) {
+    throw new Error('Skill category not found.');
+  }
 
-      if (missingSkills.length > 0) {
-        throw new AppError(
-          httpStatus.NOT_FOUND,
-          `Some skills not found in category "${category}": ${missingSkills.join(
-            ', '
-          )}.`
-        );
-      }
+  const updatedSkills = existingSkill.skills.filter(
+    (skill) => !skillsToRemove.includes(skill)
+  );
 
-      return {
-        ...item,
-        skills: item.skills.filter((skill) => !skillsToRemove.includes(skill)),
-      };
-    }
-    return item;
+  const result = await prisma.skill.update({
+    where: { id: existingSkill.id },
+    data: { skills: updatedSkills },
   });
-
-  return prisma.skill.update({
-    where: { id: skillId },
-    data: { items: updatedItems },
-  });
+  return result;
 };
 
-export const skillServices = {
-  addSkills,
-  removeSkills,
+const deleteSkillCategoryFromDB = async (id: string) => {
+  const result = await prisma.skill.delete({
+    where: { id },
+  });
+  return result;
+};
+
+export const SkillServices = {
+  addOrUpdateSkillCategory,
+
+  removeSpecificSkill,
+  deleteSkillCategoryFromDB,
 };

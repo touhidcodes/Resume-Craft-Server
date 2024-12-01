@@ -11,7 +11,7 @@ import { UserStatus } from '@prisma/client';
 const loginUserIntoDB = async (payload: TLoginUser) => {
   const userData = await prisma.user.findFirst({
     where: {
-      OR: [{ email: payload.identifier }, { userName: payload.identifier }],
+      OR: [{ email: payload.email }, { userName: payload.userName }],
     },
   });
   if (!userData) {
