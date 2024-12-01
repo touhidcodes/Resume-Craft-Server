@@ -13,8 +13,8 @@ router.post(
   validateRequest(authenticationZodSchema.loginUserZodSchema),
   authenticationControllers.loginUser
 );
-router.post('/refresh-token', authenticationControllers.refreshToken);
-router.post(
+router.get('/refresh-token', authenticationControllers.refreshToken);
+router.patch(
   '/change-password',
   auth(UserRole.ADMIN, UserRole.USER),
   validateRequest(authenticationZodSchema.changePasswordZodSchema),
