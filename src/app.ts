@@ -13,7 +13,7 @@ export const prisma = new PrismaClient();
 dotenv.config();
 
 const corsOptions = {
-  origin: ['http://localhost:5173', ''],
+  origin: ['http://localhost:5173', 'https://resume-craft-nine.vercel.app/'],
   methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
   preflightContinue: false,
   optionsSuccessStatus: 204,
@@ -39,6 +39,7 @@ app.use('/api', router);
 
 app.use(globalErrorHandler);
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 app.use((req: Request, res: Response, next: NextFunction) => {
   res.status(httpStatus.NOT_FOUND).json({
     success: false,
