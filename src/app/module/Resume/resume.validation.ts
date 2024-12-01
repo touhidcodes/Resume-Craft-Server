@@ -97,6 +97,10 @@ export const SkillSchema = z.object({
   category: z.string().min(1),
   skills: z.array(z.string().min(1)),
 });
+export const UpdateSkillSchema = z.object({
+  category: z.string().min(1).optional(),
+  skills: z.array(z.string().min(1)).optional(),
+});
 
 // Certification Schema
 export const CertificationSchema = z.object({
