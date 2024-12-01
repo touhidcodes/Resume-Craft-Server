@@ -10,7 +10,7 @@ export const resumeData = {
     location: 'USA NY New York 123 Main St 10001',
   },
   profileSummary:
-    'Passionate software developer with expertise in full-stack development and a keen eye for detail.',
+    '<p>A passionate software engineer with 5+ years of experience in building high-quality web applications. Skilled in JavaScript, TypeScript, React, and Node.js. Strong problem-solving skills and a passion for clean code.</p>',
   design: {
     font: 'Arial',
     themeColor: '#4CAF50',
@@ -51,7 +51,7 @@ export const workExperienceData = {
   startDate: '2021-05-01T00:00:00.000Z',
   endDate: '2023-03-01T00:00:00.000Z',
   location: 'San Francisco, CA',
-  responsibilities: 'Developed and maintained web applications using React.js and Redux.',
+  responsibilities: `<ul><li>Developed and maintained the front-end of the company's main product using React and Redux.</li><li>Collaborated with the design team to ensure a seamless user experience.</li><li>Optimized web pages for performance, ensuring fast load times.</li></ul>`,
 };
 export const educationData = {
   institution: 'Tech University',
@@ -59,7 +59,7 @@ export const educationData = {
   startDate: '2017-09-01T00:00:00.000Z',
   endDate: '2021-06-01T00:00:00.000Z',
   location: 'Boston, MA',
-  description: 'Focused on software engineering and data structures.',
+  description: `<p>Graduated with honors. Relevant coursework: Data Structures, Algorithms, Web Development, and Database Systems.</p>`,
 };
 export const skillData = {
   category: 'Programming Languages',
@@ -83,5 +83,5 @@ export const awardData = {
   name: 'Best Developer Award',
   organization: 'Tech Association',
   year: 2023,
-  description: 'Awarded for outstanding contributions to the development team.',
+  description: `<p>Awarded for outstanding contributions to the development team.</p>`,
 };
