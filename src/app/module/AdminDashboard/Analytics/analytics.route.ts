@@ -1,14 +1,14 @@
-import { UserRole } from '@prisma/client';
+// import { UserRole } from '@prisma/client';
 
-import express from 'express';
-import auth from '../../../middlewares/auth';
-import { AnalyticsController } from './analytics.controller';
-const router = express.Router();
-router.get(
-  '/data',
-  auth(UserRole.ADMIN),
+// import express from 'express';
+// import auth from '../../../middlewares/auth';
+// import { AnalyticsController } from './analytics.controller';
+// const router = express.Router();
+// router.get(
+//   '/data',
+//   auth(UserRole.ADMIN),
 
-  AnalyticsController.getAnalytics
-);
+//   AnalyticsController.getAnalytics
+// );
 
-export const analyticsRoutes = router;
+// export const analyticsRoutes = router;
