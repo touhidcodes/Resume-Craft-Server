@@ -63,7 +63,7 @@ export const WorkExperienceSchema = z.object({
   startDate: z.string().datetime(),
   endDate: z.string().datetime().optional(),
   location: z.string().min(1),
-  responsibilities: z.string(),
+  responsibilities: z.array(z.string()),
 });
 export const UpdateWorkExperienceSchema = z.object({
   companyName: z.string().min(1).optional(),
@@ -71,7 +71,7 @@ export const UpdateWorkExperienceSchema = z.object({
   startDate: z.string().datetime().optional(),
   endDate: z.string().datetime().optional(),
   location: z.string().min(1).optional(),
-  responsibilities: z.string().optional(),
+  responsibilities: z.array(z.string()).optional(),
 });
 
 // Education Schema
@@ -146,14 +146,7 @@ const UpdateLanguageSchema = z.object({
   name: z.string().min(1).optional(),
   proficiency: z.string().min(1).optional(),
 });
-const SectionSchema = z.object({
-  name: z.string(),
-  isActive: z.boolean(),
-});
-const UpdateSectionSchema = z.object({
-  name: z.string().optional(),
-  isActive: z.boolean().optional(),
-});
+
 // Resume Schema
 export const ResumeSchema = z.object({
   templateId: z.string().min(1),
@@ -162,7 +155,6 @@ export const ResumeSchema = z.object({
   hobby: z.array(z.string().min(1)),
   design: DesignSchema,
   language: z.array(LanguageSchema),
-  allSection: z.array(SectionSchema),
 });
 export const UpdateResumeSchema = z.object({
   personalInfo: UpdatePersonalInfoSchema.optional(),
@@ -170,7 +162,6 @@ export const UpdateResumeSchema = z.object({
   hobby: z.array(z.string().min(1)).optional(),
   design: UpdateDesignSchema.optional(),
   language: z.array(UpdateLanguageSchema).optional(),
-  allSection: z.array(UpdateSectionSchema).optional(),
 });
 
 export const CreateResumeSchema = z.object({
