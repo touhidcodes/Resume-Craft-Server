@@ -57,13 +57,24 @@ const UpdateDesignSchema = z.object({
 });
 
 // Work Experience Schema
-export const WorkExperienceSchema = z.object({
+const WorkExperienceSchema = z.object({
   companyName: z.string().min(1),
   jobTitle: z.string().min(1),
   startDate: z.string().datetime(),
   endDate: z.string().datetime().optional(),
   location: z.string().min(1),
   responsibilities: z.string(),
+});
+export const CreateWorkExperienceSchema = z.object({
+  body: z.object({
+    resumeId: z.string(),
+    companyName: z.string().min(1),
+    jobTitle: z.string().min(1),
+    startDate: z.string().datetime(),
+    endDate: z.string().datetime().optional(),
+    location: z.string().min(1),
+    responsibilities: z.string(),
+  }),
 });
 export const UpdateWorkExperienceSchema = z.object({
   companyName: z.string().min(1).optional(),
@@ -75,13 +86,23 @@ export const UpdateWorkExperienceSchema = z.object({
 });
 
 // Education Schema
-export const EducationSchema = z.object({
+const EducationSchema = z.object({
   institution: z.string().min(1),
   degree: z.string().min(1),
   startDate: z.string().datetime(),
   endDate: z.string().datetime().optional(),
   location: z.string().min(1),
   description: z.string().min(1).optional(),
+});
+export const CreateEducationSchema = z.object({
+  body: z.object({
+    institution: z.string().min(1),
+    degree: z.string().min(1),
+    startDate: z.string().datetime(),
+    endDate: z.string().datetime().optional(),
+    location: z.string().min(1),
+    description: z.string().min(1).optional(),
+  }),
 });
 export const UpdateEducationSchema = z.object({
   institution: z.string().min(1).optional(),
@@ -93,7 +114,13 @@ export const UpdateEducationSchema = z.object({
 });
 
 // Skill Schema
-export const SkillSchema = z.object({
+export const CreateSkillSchema = z.object({
+  body: z.object({
+    category: z.string().min(1),
+    skills: z.array(z.string().min(1)),
+  }),
+});
+const SkillSchema = z.object({
   category: z.string().min(1),
   skills: z.array(z.string().min(1)),
 });
@@ -103,7 +130,16 @@ export const UpdateSkillSchema = z.object({
 });
 
 // Certification Schema
-export const CertificationSchema = z.object({
+export const CreateCertificationSchema = z.object({
+  body: z.object({
+    name: z.string().min(1),
+    issuer: z.string().min(1),
+    issueDate: z.string().datetime(),
+    expirationDate: z.string().datetime().optional(),
+    certificateLink: z.string().min(1).optional(),
+  }),
+});
+const CertificationSchema = z.object({
   name: z.string().min(1),
   issuer: z.string().min(1),
   issueDate: z.string().datetime(),
@@ -119,7 +155,23 @@ export const UpdateCertificationSchema = z.object({
 });
 
 // Project Schema
-export const ProjectSchema = z.object({
+export const CreateProjectSchema = z.object({
+  body: z.object({
+    name: z.string().min(1),
+    description: z.string().min(1).optional(),
+    technologies: z.array(z.string().min(1)),
+    role: z.string().min(1),
+    link: z.string().url().optional(),
+  }),
+});
+export const UpdateProjectSchema = z.object({
+  name: z.string().min(1),
+  description: z.string().min(1).optional(),
+  technologies: z.array(z.string().min(1)),
+  role: z.string().min(1),
+  link: z.string().url().optional(),
+});
+const ProjectSchema = z.object({
   name: z.string().min(1),
   description: z.string().min(1).optional(),
   technologies: z.array(z.string().min(1)),
@@ -128,7 +180,15 @@ export const ProjectSchema = z.object({
 });
 
 // Award Schema
-export const AwardSchema = z.object({
+export const CreateAwardSchema = z.object({
+  body: z.object({
+    name: z.string().min(1),
+    organization: z.string().min(1),
+    year: z.number().int(),
+    description: z.string().min(1).optional(),
+  }),
+});
+const AwardSchema = z.object({
   name: z.string().min(1),
   organization: z.string().min(1),
   year: z.number().int(),

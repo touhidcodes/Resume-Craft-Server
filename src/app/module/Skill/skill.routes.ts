@@ -1,7 +1,7 @@
 import express from 'express';
 import validateRequest from '../../middlewares/validateRequest';
 import {
-  SkillSchema,
+  CreateSkillSchema,
   UpdateSkillSchema,
 } from '../Resume/resume.validation';
 import { skillControllers } from './skill.controller';
@@ -10,7 +10,7 @@ const router = express.Router();
 
 router.post(
   '/create-skill',
-  validateRequest(SkillSchema),
+  validateRequest(CreateSkillSchema),
   skillControllers.createSkill
 );
 router.patch(
