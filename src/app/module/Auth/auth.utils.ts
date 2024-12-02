@@ -1,6 +1,6 @@
 import jwt, { JwtPayload, Secret } from 'jsonwebtoken';
 
-export const createToken = async (
+export const createToken = (
   jwtPayload: { userId: string },
   secret: Secret,
   expiresIn: string

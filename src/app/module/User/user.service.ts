@@ -188,6 +188,7 @@ const getUserFromDB = async (userData: JwtPayload) => {
   const result = await prisma.user.findUniqueOrThrow({
     where: {
       id: userData.userId,
+      status: UserStatus.ACTIVE,
     },
     select: {
       id: true,

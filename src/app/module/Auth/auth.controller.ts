@@ -7,7 +7,7 @@ import { sendRes } from '../../shared/sendResponse';
 const loginUser = catchAsync(async (req, res) => {
   const result = await authenticationServices.loginUserIntoDB(req.body);
   const { refreshToken } = result;
-  console.log(result.accessToken);
+
   res.cookie('refreshToken', refreshToken, {
     secure: false,
     httpOnly: true,

@@ -60,34 +60,34 @@ const UpdateDesignSchema = z.object({
 export const WorkExperienceSchema = z.object({
   companyName: z.string().min(1),
   jobTitle: z.string().min(1),
-  startDate: z.string().datetime(),
-  endDate: z.string().datetime().optional(),
+  startDate: z.string(),
+  endDate: z.string().optional(),
   location: z.string().min(1),
-  responsibilities: z.array(z.string()),
+  responsibilities: z.string(),
 });
 export const UpdateWorkExperienceSchema = z.object({
   companyName: z.string().min(1).optional(),
   jobTitle: z.string().min(1).optional(),
-  startDate: z.string().datetime().optional(),
-  endDate: z.string().datetime().optional(),
+  startDate: z.string().optional(),
+  endDate: z.string().optional(),
   location: z.string().min(1).optional(),
-  responsibilities: z.array(z.string()).optional(),
+  responsibilities: z.string().optional(),
 });
 
 // Education Schema
 export const EducationSchema = z.object({
   institution: z.string().min(1),
   degree: z.string().min(1),
-  startDate: z.string().datetime(),
-  endDate: z.string().datetime().optional(),
+  startDate: z.string(),
+  endDate: z.string().optional(),
   location: z.string().min(1),
   description: z.string().min(1).optional(),
 });
 export const UpdateEducationSchema = z.object({
   institution: z.string().min(1).optional(),
   degree: z.string().min(1).optional(),
-  startDate: z.string().datetime().optional(),
-  endDate: z.string().datetime().optional(),
+  startDate: z.string().optional(),
+  endDate: z.string().optional(),
   location: z.string().min(1).optional(),
   description: z.string().min(1).optional(),
 });
@@ -97,20 +97,24 @@ export const SkillSchema = z.object({
   category: z.string().min(1),
   skills: z.array(z.string().min(1)),
 });
+export const UpdateSkillSchema = z.object({
+  category: z.string().min(1).optional(),
+  skills: z.array(z.string().min(1)).optional(),
+});
 
 // Certification Schema
 export const CertificationSchema = z.object({
   name: z.string().min(1),
   issuer: z.string().min(1),
-  issueDate: z.string().datetime(),
-  expirationDate: z.string().datetime().optional(),
+  issueDate: z.string(),
+  expirationDate: z.string().optional(),
   certificateLink: z.string().min(1).optional(),
 });
 export const UpdateCertificationSchema = z.object({
   name: z.string().min(1).optional(),
   issuer: z.string().min(1).optional(),
-  issueDate: z.string().datetime().optional(),
-  expirationDate: z.string().datetime().optional(),
+  issueDate: z.string().optional(),
+  expirationDate: z.string().optional(),
   certificateLink: z.string().min(1).optional(),
 });
 
@@ -146,7 +150,14 @@ const UpdateLanguageSchema = z.object({
   name: z.string().min(1).optional(),
   proficiency: z.string().min(1).optional(),
 });
-
+const SectionSchema = z.object({
+  name: z.string(),
+  isActive: z.boolean(),
+});
+const UpdateSectionSchema = z.object({
+  name: z.string().optional(),
+  isActive: z.boolean().optional(),
+});
 // Resume Schema
 export const ResumeSchema = z.object({
   templateId: z.string().min(1),
@@ -155,6 +166,7 @@ export const ResumeSchema = z.object({
   hobby: z.array(z.string().min(1)),
   design: DesignSchema,
   language: z.array(LanguageSchema),
+  allSection: z.array(SectionSchema),
 });
 export const UpdateResumeSchema = z.object({
   personalInfo: UpdatePersonalInfoSchema.optional(),
@@ -162,6 +174,7 @@ export const UpdateResumeSchema = z.object({
   hobby: z.array(z.string().min(1)).optional(),
   design: UpdateDesignSchema.optional(),
   language: z.array(UpdateLanguageSchema).optional(),
+  allSection: z.array(UpdateSectionSchema).optional(),
 });
 
 export const CreateResumeSchema = z.object({
