@@ -60,16 +60,16 @@ const UpdateDesignSchema = z.object({
 export const WorkExperienceSchema = z.object({
   companyName: z.string().min(1),
   jobTitle: z.string().min(1),
-  startDate: z.string().datetime(),
-  endDate: z.string().datetime().optional(),
+  startDate: z.string(),
+  endDate: z.string().optional(),
   location: z.string().min(1),
   responsibilities: z.string(),
 });
 export const UpdateWorkExperienceSchema = z.object({
   companyName: z.string().min(1).optional(),
   jobTitle: z.string().min(1).optional(),
-  startDate: z.string().datetime().optional(),
-  endDate: z.string().datetime().optional(),
+  startDate: z.string().optional(),
+  endDate: z.string().optional(),
   location: z.string().min(1).optional(),
   responsibilities: z.string().optional(),
 });
@@ -78,16 +78,16 @@ export const UpdateWorkExperienceSchema = z.object({
 export const EducationSchema = z.object({
   institution: z.string().min(1),
   degree: z.string().min(1),
-  startDate: z.string().datetime(),
-  endDate: z.string().datetime().optional(),
+  startDate: z.string(),
+  endDate: z.string().optional(),
   location: z.string().min(1),
   description: z.string().min(1).optional(),
 });
 export const UpdateEducationSchema = z.object({
   institution: z.string().min(1).optional(),
   degree: z.string().min(1).optional(),
-  startDate: z.string().datetime().optional(),
-  endDate: z.string().datetime().optional(),
+  startDate: z.string().optional(),
+  endDate: z.string().optional(),
   location: z.string().min(1).optional(),
   description: z.string().min(1).optional(),
 });
@@ -106,15 +106,15 @@ export const UpdateSkillSchema = z.object({
 export const CertificationSchema = z.object({
   name: z.string().min(1),
   issuer: z.string().min(1),
-  issueDate: z.string().datetime(),
-  expirationDate: z.string().datetime().optional(),
+  issueDate: z.string(),
+  expirationDate: z.string().optional(),
   certificateLink: z.string().min(1).optional(),
 });
 export const UpdateCertificationSchema = z.object({
   name: z.string().min(1).optional(),
   issuer: z.string().min(1).optional(),
-  issueDate: z.string().datetime().optional(),
-  expirationDate: z.string().datetime().optional(),
+  issueDate: z.string().optional(),
+  expirationDate: z.string().optional(),
   certificateLink: z.string().min(1).optional(),
 });
 
