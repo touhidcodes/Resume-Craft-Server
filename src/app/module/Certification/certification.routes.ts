@@ -1,7 +1,7 @@
 import express from 'express';
 import validateRequest from '../../middlewares/validateRequest';
 import {
-  CertificationSchema,
+  CreateCertificationSchema,
   UpdateCertificationSchema,
 } from '../Resume/resume.validation';
 import { certificationControllers } from './certification.controller';
@@ -10,7 +10,7 @@ const router = express.Router();
 
 router.post(
   '/create-certification',
-  validateRequest(CertificationSchema),
+  validateRequest(CreateCertificationSchema),
   certificationControllers.createCertification
 );
 router.patch(

@@ -1,7 +1,7 @@
 import express from 'express';
 import validateRequest from '../../middlewares/validateRequest';
 import {
-  EducationSchema,
+  CreateEducationSchema,
   UpdateEducationSchema,
 } from '../Resume/resume.validation';
 import { educationControllers } from './education.controller';
@@ -10,7 +10,7 @@ const router = express.Router();
 
 router.post(
   '/create-education',
-  validateRequest(EducationSchema),
+  validateRequest(CreateEducationSchema),
   educationControllers.createEducation
 );
 router.patch(
