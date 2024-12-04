@@ -2,15 +2,15 @@ import express from 'express';
 import validateRequest from '../../middlewares/validateRequest';
 import { workExperienceControllers } from './workExperience.controller';
 import {
+  CreateWorkExperienceSchema,
   UpdateWorkExperienceSchema,
-  WorkExperienceSchema,
 } from '../Resume/resume.validation';
 
 const router = express.Router();
 
 router.post(
   '/create-experience',
-  validateRequest(WorkExperienceSchema),
+  validateRequest(CreateWorkExperienceSchema),
   workExperienceControllers.createWorkExperience
 );
 router.patch(

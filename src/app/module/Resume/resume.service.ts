@@ -147,7 +147,7 @@ const updateResumeIntoDB = async (
       }
       if (titles && Object.keys(titles).length) {
         for (const [key, value] of Object.entries(titles)) {
-          modifiedUpdatedData.design.sectionStyles.header[
+          modifiedUpdatedData.design.sectionStyles.titles[
             `${key as keyof typeof titles}`
           ] = value;
         }
