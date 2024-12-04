@@ -18,6 +18,10 @@ model User {
     userName  String     @unique
     email     String     @unique
     password  String
+    phone     String?
+    bio       String?
+    country   String?
+    city      String?
     role      UserRole
     status    UserStatus @default(ACTIVE)
     createdAt DateTime   @default(now())
