@@ -65,6 +65,7 @@ const WorkExperienceSchema = z.object({
   location: z.string().min(1),
   responsibilities: z.string(),
 });
+
 export const CreateWorkExperienceSchema = z.object({
   body: z.object({
     resumeId: z.string(),
@@ -94,6 +95,7 @@ const EducationSchema = z.object({
   location: z.string().min(1),
   description: z.string().min(1).optional(),
 });
+
 export const CreateEducationSchema = z.object({
   body: z.object({
     institution: z.string().min(1),
