@@ -53,5 +53,10 @@ router.patch(
   validateRequest(UpdateResumeSchema),
   resumeControllers.updateResume
 );
+router.delete(
+  '/delete-resume/:resumeId',
+  auth(UserRole.ADMIN, UserRole.USER),
+  resumeControllers.deleteResume
+);
 
 export const resumeRoutes = router;

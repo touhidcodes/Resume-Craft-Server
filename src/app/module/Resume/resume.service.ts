@@ -170,7 +170,7 @@ const deleteUserResumeFromDB = async (userId: string, resumeId: string) => {
   const result = await prisma.$transaction(async (transactionClient) => {
     await transactionClient.resume.findUniqueOrThrow({
       where: {
-        userId,
+        // userId,
         id: resumeId,
       },
     });
@@ -196,5 +196,5 @@ export const resumeServices = {
   getResumeFromDB,
   geAllUserResumeFromDB,
   updateResumeIntoDB,
-  deleteUserResumeFromDB
+  deleteUserResumeFromDB,
 };
