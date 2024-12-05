@@ -12,6 +12,10 @@ import { JwtPayload } from 'jsonwebtoken';
 import {
   awardData,
   certificationData,
+  educationData,
+  projectData,
+  resumeData,
+  skillData,
   workExperienceData,
 } from './resume.demoData';
 
@@ -211,12 +215,15 @@ const resumeSectionCompletionStatusFromDB = async (id: string) => {
     },
   });
   let isWorkExperienceSectionComplete = false;
-  let isAwardSectionComplete = false;
-  //   let isProjectSectionComplete = false;
-  //   let isEducationSectionComplete = false;
+  let isEducationSectionComplete = false;
   let isCertificationSectionComplete = false;
-  //   let isCertificationSectionComplete = false;
-  //   let isCertificationSectionComplete = false;
+  let isSkillSectionComplete = false;
+  let isProjectSectionComplete = false;
+  let isAwardSectionComplete = false;
+  let isSummarySectionComplete = false;
+  let isHeaderSectionComplete = false;
+  let isLanguageSectionComplete = false;
+  let isHobbySectionComplete = false;
   if (resume.WorkExperience.length > 0) {
     resume.WorkExperience.map(
       ({ companyName, jobTitle, location, startDate, responsibilities }) => {
@@ -272,59 +279,140 @@ const resumeSectionCompletionStatusFromDB = async (id: string) => {
       }
     });
   }
-  if (resume.Certification.length > 0) {
-    resume.Certification.map(({ name, certificateLink, issueDate, issuer }) => {
-      if (
-        name === certificationData.name ||
-        issuer === certificationData.issuer ||
-        issueDate === certificationData.issueDate ||
-        certificateLink === certificationData.certificateLink
-      ) {
-        isCertificationSectionComplete = false;
-      } else if (name === null || issuer === null || issueDate === null) {
-        isCertificationSectionComplete = false;
-      } else {
-        isCertificationSectionComplete = true;
-      }
-    });
-  }
-  if (resume.Certification.length > 0) {
-    resume.Certification.map(({ name, certificateLink, issueDate, issuer }) => {
-      if (
-        name === certificationData.name ||
-        issuer === certificationData.issuer ||
-        issueDate === certificationData.issueDate ||
-        certificateLink === certificationData.certificateLink
-      ) {
-        isCertificationSectionComplete = false;
-      } else if (name === null || issuer === null || issueDate === null) {
-        isCertificationSectionComplete = false;
-      } else {
-        isCertificationSectionComplete = true;
-      }
-    });
-  }
-  if (resume.Certification.length > 0) {
-    resume.Certification.map(({ name, certificateLink, issueDate, issuer }) => {
-      if (
-        name === certificationData.name ||
-        issuer === certificationData.issuer ||
-        issueDate === certificationData.issueDate ||
-        certificateLink === certificationData.certificateLink
-      ) {
-        isCertificationSectionComplete = false;
-      } else if (name === null || issuer === null || issueDate === null) {
-        isCertificationSectionComplete = false;
-      } else {
-        isCertificationSectionComplete = true;
-      }
-    });
-  }
 
+  //
+  if (resume.Project.length > 0) {
+    resume.Project.map(({ name, description, link, role, technologies }) => {
+      if (
+        name === projectData.name ||
+        link === projectData.link ||
+        role === projectData.role ||
+        technologies === projectData.technologies ||
+        description === projectData.description
+      ) {
+        isProjectSectionComplete = false;
+      } else if (
+        name === null ||
+        link === null ||
+        role === null ||
+        technologies === null
+      ) {
+        isProjectSectionComplete = false;
+      } else {
+        isProjectSectionComplete = true;
+      }
+    });
+  }
+  if (resume.Education.length > 0) {
+    resume.Education.map(
+      ({ institution, location, startDate, degree, description, endDate }) => {
+        if (
+          institution === educationData.institution ||
+          location === educationData.location ||
+          degree === educationData.degree ||
+          description === educationData.description ||
+          (startDate === educationData.startDate &&
+            endDate === educationData.endDate)
+        ) {
+          isEducationSectionComplete = false;
+        } else if (
+          institution === null ||
+          location === null ||
+          degree === null
+        ) {
+          isEducationSectionComplete = false;
+        } else {
+          isEducationSectionComplete = true;
+        }
+      }
+    );
+  }
+  if (resume.Skill.length > 0) {
+    resume.Skill.map(({ category, skills }) => {
+      if (JSON.stringify(skills) === JSON.stringify(skillData.skills)) {
+        isSkillSectionComplete = false;
+      } else if (category === null || skills === null) {
+        isSkillSectionComplete = false;
+      } else {
+        isSkillSectionComplete = true;
+      }
+    });
+  }
+  if (resume.personalInfo) {
+    const {
+      fullName,
+      email,
+      github,
+      jobTitle,
+      linkedin,
+      location,
+      phone,
+      website,
+    } = resume.personalInfo;
+    if (
+      fullName === resumeData.personalInfo.fullName ||
+      email === resumeData.personalInfo.email ||
+      github === resumeData.personalInfo.github ||
+      jobTitle === resumeData.personalInfo.jobTitle ||
+      linkedin === resumeData.personalInfo.linkedin ||
+      location === resumeData.personalInfo.location ||
+      phone === resumeData.personalInfo.phone ||
+      website === resumeData.personalInfo.website
+    ) {
+      isHeaderSectionComplete = false;
+    } else if (
+      fullName === null ||
+      email === null ||
+      github === null ||
+      jobTitle === null ||
+      linkedin === null ||
+      website === null ||
+      phone === null ||
+      location === null
+    ) {
+      isHeaderSectionComplete = false;
+    } else {
+      isHeaderSectionComplete = true;
+    }
+  }
+  if (resume.hobby) {
+    if (JSON.stringify(resume.hobby) === JSON.stringify(resumeData.hobby)) {
+      isHobbySectionComplete = false;
+    } else if (resume.hobby === null) {
+      isHobbySectionComplete = false;
+    } else {
+      isHobbySectionComplete = true;
+    }
+  }
+  if (resume.profileSummary) {
+    if (resume.profileSummary === resumeData.profileSummary) {
+      isSummarySectionComplete = false;
+    } else if (resume.profileSummary === null) {
+      isSummarySectionComplete = false;
+    } else {
+      isSummarySectionComplete = true;
+    }
+  }
+  if (resume.language.length > 0) {
+    resume.language.map(({ proficiency, name }) => {
+      if (proficiency === null || name === null) {
+        isLanguageSectionComplete = false;
+      } else {
+        isLanguageSectionComplete = true;
+      }
+    });
+  }
   return {
     isAwardSectionComplete,
     isWorkExperienceSectionComplete,
     isCertificationSectionComplete,
+    isProjectSectionComplete,
+    isSkillSectionComplete,
+    isEducationSectionComplete,
+    isSummarySectionComplete,
+    isHobbySectionComplete,
+    isHeaderSectionComplete,
+    isLanguageSectionComplete,
   };
 };
 export const resumeServices = {

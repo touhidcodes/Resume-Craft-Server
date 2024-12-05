@@ -20,9 +20,9 @@ router.post(
   '/create-resume',
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   (req: Request, res: Response, next: NextFunction) => {
-    const { templateId } = req.body;
+    const { templateId ,name} = req.body;
     const data = {
-      resumeData: { templateId, ...resumeData },
+      resumeData: { name,templateId, ...resumeData },
       workExperienceData,
       educationData,
       skillData,
