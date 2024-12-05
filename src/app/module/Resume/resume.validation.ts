@@ -225,6 +225,7 @@ const UpdateSectionSchema = z.object({
 });
 // Resume Schema
 export const ResumeSchema = z.object({
+  name: z.string(),
   templateId: z.string(),
   personalInfo: PersonalInfoSchema,
   profileSummary: z.string(),
@@ -234,6 +235,7 @@ export const ResumeSchema = z.object({
   allSection: z.array(SectionSchema),
 });
 export const UpdateResumeSchema = z.object({
+  name: z.string().optional(),
   templateId: z.string().optional(),
   personalInfo: UpdatePersonalInfoSchema.optional(),
   profileSummary: z.string().optional(),
