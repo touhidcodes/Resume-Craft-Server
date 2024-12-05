@@ -171,7 +171,7 @@ const updateResumeIntoDB = async (
   });
   return result;
 };
-const deleteUserResumeFromDB = async (userId: string, resumeId: string) => {
+const deleteUserResumeFromDB = async (resumeId: string, userId: string) => {
   const result = await prisma.$transaction(async (transactionClient) => {
     await transactionClient.resume.findUniqueOrThrow({
       where: {
@@ -179,18 +179,18 @@ const deleteUserResumeFromDB = async (userId: string, resumeId: string) => {
         id: resumeId,
       },
     });
-    const deleteResume = await transactionClient.resume.delete({
-      where: {
-        id: resumeId,
-      },
-    });
+
     await transactionClient.workExperience.deleteMany({ where: { resumeId } });
     await transactionClient.education.deleteMany({ where: { resumeId } });
     await transactionClient.skill.deleteMany({ where: { resumeId } });
     await transactionClient.certification.deleteMany({ where: { resumeId } });
     await transactionClient.project.deleteMany({ where: { resumeId } });
     await transactionClient.award.deleteMany({ where: { resumeId } });
-
+    const deleteResume = await transactionClient.resume.delete({
+      where: {
+        id: resumeId,
+      },
+    });
     return deleteResume;
   });
 
@@ -212,11 +212,11 @@ const resumeSectionCompletionStatusFromDB = async (id: string) => {
   });
   let isWorkExperienceSectionComplete = false;
   let isAwardSectionComplete = false;
-//   let isProjectSectionComplete = false;
-//   let isEducationSectionComplete = false;
-//   let isCertificationSectionComplete = false;
-//   let isCertificationSectionComplete = false;
-//   let isCertificationSectionComplete = false;
+  //   let isProjectSectionComplete = false;
+  //   let isEducationSectionComplete = false;
+  let isCertificationSectionComplete = false;
+  //   let isCertificationSectionComplete = false;
+  //   let isCertificationSectionComplete = false;
   if (resume.WorkExperience.length > 0) {
     resume.WorkExperience.map(
       ({ companyName, jobTitle, location, startDate, responsibilities }) => {

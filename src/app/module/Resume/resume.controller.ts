@@ -57,10 +57,23 @@ const resumeSectionCompletionStatus = catchAsync(async (req, res) => {
   });
 });
 
+const deleteResume = catchAsync(async (req, res) => {
+  const result = await resumeServices.deleteUserResumeFromDB(
+    req.params.resumeId,
+    req.user.userId
+  );
+  sendRes(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Resume Deleted successfully',
+    data: result,
+  });
+});
+
 export const resumeControllers = {
   createResume,
   getResume,
   getAllUserResume,
   updateResume,
-  resumeSectionCompletionStatus,
+  resumeSectionCompletionStatus,deleteResume
 };
