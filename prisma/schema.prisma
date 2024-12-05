@@ -42,10 +42,12 @@ enum UserStatus {
 }
 
 model Template {
-    id     String   @id @default(auto()) @map("_id") @db.ObjectId
-    image  String
-    name   String
-    Resume Resume[]
+    id        String   @id @default(auto()) @map("_id") @db.ObjectId
+    image     String
+    name      String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    Resume    Resume[]
 }
 
 model Resume {
@@ -61,6 +63,8 @@ model Resume {
     language       Language[]
     allSection     Section[]
     lastUpdated    DateTime     @updatedAt
+    createdAt      DateTime     @default(now())
+    updatedAt      DateTime     @updatedAt
 
     WorkExperience WorkExperience[]
     Education      Education[]
@@ -110,46 +114,54 @@ type Style {
 
 // workExperience
 model WorkExperience {
-    id               String  @id @default(auto()) @map("_id") @db.ObjectId
-    resumeId         String  @db.ObjectId
-    resume           Resume  @relation(fields: [resumeId], references: [id])
+    id               String   @id @default(auto()) @map("_id") @db.ObjectId
+    resumeId         String   @db.ObjectId
+    resume           Resume   @relation(fields: [resumeId], references: [id])
     companyName      String
     jobTitle         String
     startDate        String
     endDate          String?
     location         String
     responsibilities String?
+    createdAt        DateTime @default(now())
+    updatedAt        DateTime @updatedAt
 }
 
 model Education {
-    id          String  @id @default(auto()) @map("_id") @db.ObjectId
-    resumeId    String  @db.ObjectId
-    resume      Resume  @relation(fields: [resumeId], references: [id])
+    id          String   @id @default(auto()) @map("_id") @db.ObjectId
+    resumeId    String   @db.ObjectId
+    resume      Resume   @relation(fields: [resumeId], references: [id])
     institution String
     degree      String
     startDate   String
     endDate     String?
     location    String
     description String?
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
 }
 
 model Skill {
-    id       String   @id @default(auto()) @map("_id") @db.ObjectId
-    resumeId String   @db.ObjectId
-    resume   Resume   @relation(fields: [resumeId], references: [id])
-    category String
-    skills   String[]
+    id        String   @id @default(auto()) @map("_id") @db.ObjectId
+    resumeId  String   @db.ObjectId
+    resume    Resume   @relation(fields: [resumeId], references: [id])
+    category  String
+    skills    String[]
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 }
 
 model Certification {
-    id              String  @id @default(auto()) @map("_id") @db.ObjectId
-    resumeId        String  @db.ObjectId
-    resume          Resume  @relation(fields: [resumeId], references: [id])
+    id              String   @id @default(auto()) @map("_id") @db.ObjectId
+    resumeId        String   @db.ObjectId
+    resume          Resume   @relation(fields: [resumeId], references: [id])
     name            String
     issuer          String
     issueDate       String
     expirationDate  String?
     certificateLink String?
+    createdAt       DateTime @default(now())
+    updatedAt       DateTime @updatedAt
 }
 
 model Project {
@@ -161,14 +173,18 @@ model Project {
     technologies String[]
     role         String
     link         String
+    createdAt    DateTime @default(now())
+    updatedAt    DateTime @updatedAt
 }
 
 model Award {
-    id           String  @id @default(auto()) @map("_id") @db.ObjectId
-    resumeId     String  @db.ObjectId
-    resume       Resume  @relation(fields: [resumeId], references: [id])
+    id           String   @id @default(auto()) @map("_id") @db.ObjectId
+    resumeId     String   @db.ObjectId
+    resume       Resume   @relation(fields: [resumeId], references: [id])
     name         String
     organization String
     year         Int
     description  String?
+    createdAt    DateTime @default(now())
+    updatedAt    DateTime @updatedAt
 }
