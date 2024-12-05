@@ -48,16 +48,16 @@ export const resumeData = {
 export const workExperienceData = {
   companyName: 'TechCorp',
   jobTitle: 'Frontend Developer',
-  startDate: '2021-05-01T00:00:00.000Z',
-  endDate: '2023-03-01T00:00:00.000Z',
+  startDate: '06/2022',
+  endDate: '11/2023',
   location: 'San Francisco, CA',
   responsibilities: `<ul><li>Developed and maintained the front-end of the company's main product using React and Redux.</li><li>Collaborated with the design team to ensure a seamless user experience.</li><li>Optimized web pages for performance, ensuring fast load times.</li></ul>`,
 };
 export const educationData = {
   institution: 'Tech University',
   degree: 'Bachelor of Computer Science',
-  startDate: '2017-09-01T00:00:00.000Z',
-  endDate: '2021-06-01T00:00:00.000Z',
+  startDate: '05/2016',
+  endDate: '10/2018',
   location: 'Boston, MA',
   description: `<p>Graduated with honors. Relevant coursework: Data Structures, Algorithms, Web Development, and Database Systems.</p>`,
 };
@@ -68,8 +68,8 @@ export const skillData = {
 export const certificationData = {
   name: 'Certified React Developer',
   issuer: 'React Institute',
-  issueDate: '2022-03-15T00:00:00.000Z',
-  expirationDate: '2025-03-15T00:00:00.000Z',
+  issueDate: '05/2019',
+  expirationDate: '12/2022',
   certificateLink: '12345-ABCDE',
 };
 export const projectData = {

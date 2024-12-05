@@ -1,8 +1,8 @@
 // This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+// // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+// // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 datasource db {
     provider = "mongodb"
@@ -18,6 +18,10 @@ model User {
     userName  String     @unique
     email     String     @unique
     password  String
+    phone     String?
+    bio       String?
+    country   String?
+    city      String?
     role      UserRole
     status    UserStatus @default(ACTIVE)
     createdAt DateTime   @default(now())
@@ -106,25 +110,25 @@ type Style {
 
 // workExperience
 model WorkExperience {
-    id               String    @id @default(auto()) @map("_id") @db.ObjectId
-    resumeId         String    @db.ObjectId
-    resume           Resume    @relation(fields: [resumeId], references: [id])
+    id               String  @id @default(auto()) @map("_id") @db.ObjectId
+    resumeId         String  @db.ObjectId
+    resume           Resume  @relation(fields: [resumeId], references: [id])
     companyName      String
     jobTitle         String
-    startDate        DateTime
-    endDate          DateTime?
+    startDate        String
+    endDate          String?
     location         String
     responsibilities String?
 }
 
 model Education {
-    id          String    @id @default(auto()) @map("_id") @db.ObjectId
-    resumeId    String    @db.ObjectId
-    resume      Resume    @relation(fields: [resumeId], references: [id])
+    id          String  @id @default(auto()) @map("_id") @db.ObjectId
+    resumeId    String  @db.ObjectId
+    resume      Resume  @relation(fields: [resumeId], references: [id])
     institution String
     degree      String
-    startDate   DateTime
-    endDate     DateTime?
+    startDate   String
+    endDate     String?
     location    String
     description String?
 }
@@ -138,13 +142,13 @@ model Skill {
 }
 
 model Certification {
-    id              String    @id @default(auto()) @map("_id") @db.ObjectId
-    resumeId        String    @db.ObjectId
-    resume          Resume    @relation(fields: [resumeId], references: [id])
+    id              String  @id @default(auto()) @map("_id") @db.ObjectId
+    resumeId        String  @db.ObjectId
+    resume          Resume  @relation(fields: [resumeId], references: [id])
     name            String
     issuer          String
-    issueDate       DateTime
-    expirationDate  DateTime?
+    issueDate       String
+    expirationDate  String?
     certificateLink String?
 }
 

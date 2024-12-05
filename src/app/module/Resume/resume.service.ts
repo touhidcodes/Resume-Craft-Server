@@ -116,13 +116,18 @@ const updateResumeIntoDB = async (
       id,
     },
   });
-  const { design, personalInfo, ...remainingResumeData } = resumeUpdateData;
-
+  const { design, personalInfo, templateId, ...remainingResumeData } =
+    resumeUpdateData;
+  if (!templateId) {
+    await prisma.template.findUniqueOrThrow({ where: { id: templateId } });
+  }
   const modifiedUpdatedData = {
     ...remainingResumeData,
+    templateId: templateId,
     personalInfo: resumeData.personalInfo,
     design: resumeData.design,
   };
+
   if (personalInfo && Object.keys(personalInfo).length) {
     for (const [key, value] of Object.entries(personalInfo)) {
       modifiedUpdatedData.personalInfo[`${key as keyof typeof personalInfo}`] =
@@ -147,7 +152,7 @@ const updateResumeIntoDB = async (
       }
       if (titles && Object.keys(titles).length) {
         for (const [key, value] of Object.entries(titles)) {
-          modifiedUpdatedData.design.sectionStyles.header[
+          modifiedUpdatedData.design.sectionStyles.titles[
             `${key as keyof typeof titles}`
           ] = value;
         }

@@ -1,7 +1,7 @@
 import express from 'express';
 import validateRequest from '../../middlewares/validateRequest';
 import {
-  AwardSchema,
+  CreateAwardSchema,
   UpdateAwardSchema,
 } from '../Resume/resume.validation';
 import { awardControllers } from './award.controller';
@@ -10,7 +10,7 @@ const router = express.Router();
 
 router.post(
   '/create-award',
-  validateRequest(AwardSchema),
+  validateRequest(CreateAwardSchema),
   awardControllers.createAward
 );
 router.patch(
@@ -19,10 +19,7 @@ router.patch(
   awardControllers.updateAward
 );
 router.get('/award/:id', awardControllers.getAAward);
-router.get(
-  '/all-award/:resumeId',
-  awardControllers.getAllAwardOfAResume
-);
+router.get('/all-award/:resumeId', awardControllers.getAllAwardOfAResume);
 router.delete('/remove-award/:id', awardControllers.deleteAward);
 
 export const awardRoutes = router;
