@@ -166,9 +166,35 @@ const updateResumeIntoDB = async (
   });
   return result;
 };
+const deleteUserResumeFromDB = async (userId: string, resumeId: string) => {
+  const result = await prisma.$transaction(async (transactionClient) => {
+    await transactionClient.resume.findUniqueOrThrow({
+      where: {
+        userId,
+        id: resumeId,
+      },
+    });
+    const deleteResume = await transactionClient.resume.delete({
+      where: {
+        id: resumeId,
+      },
+    });
+    await transactionClient.workExperience.deleteMany({ where: { resumeId } });
+    await transactionClient.education.deleteMany({ where: { resumeId } });
+    await transactionClient.skill.deleteMany({ where: { resumeId } });
+    await transactionClient.certification.deleteMany({ where: { resumeId } });
+    await transactionClient.project.deleteMany({ where: { resumeId } });
+    await transactionClient.award.deleteMany({ where: { resumeId } });
+
+    return deleteResume;
+  });
+
+  return result;
+};
 export const resumeServices = {
   createResumeIntoDB,
   getResumeFromDB,
   geAllUserResumeFromDB,
   updateResumeIntoDB,
+  deleteUserResumeFromDB
 };
