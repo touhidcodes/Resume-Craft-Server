@@ -47,13 +47,18 @@ router.get(
   auth(UserRole.ADMIN, UserRole.USER),
   resumeControllers.getAllUserResume
 );
+router.get(
+  '/status-resume/:id',
+  auth(UserRole.ADMIN, UserRole.USER),
+  resumeControllers.resumeSectionCompletionStatus
+);
 router.patch(
   '/update-resume/:id',
   auth(UserRole.ADMIN, UserRole.USER),
   validateRequest(UpdateResumeSchema),
   resumeControllers.updateResume
 );
-router.delete(
+router.get(
   '/delete-resume/:resumeId',
   auth(UserRole.ADMIN, UserRole.USER),
   resumeControllers.deleteResume

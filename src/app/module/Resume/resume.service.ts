@@ -9,6 +9,11 @@ import {
 } from '@prisma/client';
 import { prisma } from '../../../app';
 import { JwtPayload } from 'jsonwebtoken';
+import {
+  awardData,
+  certificationData,
+  workExperienceData,
+} from './resume.demoData';
 
 export const createResumeIntoDB = async (
   {
@@ -166,30 +171,161 @@ const updateResumeIntoDB = async (
   });
   return result;
 };
-const deleteUserResumeFromDB = async (userId: string, resumeId: string) => {
+const deleteUserResumeFromDB = async (resumeId: string, userId: string) => {
   const result = await prisma.$transaction(async (transactionClient) => {
     await transactionClient.resume.findUniqueOrThrow({
       where: {
-        // userId,
+        userId,
         id: resumeId,
       },
     });
-    const deleteResume = await transactionClient.resume.delete({
-      where: {
-        id: resumeId,
-      },
-    });
+
     await transactionClient.workExperience.deleteMany({ where: { resumeId } });
     await transactionClient.education.deleteMany({ where: { resumeId } });
     await transactionClient.skill.deleteMany({ where: { resumeId } });
     await transactionClient.certification.deleteMany({ where: { resumeId } });
     await transactionClient.project.deleteMany({ where: { resumeId } });
     await transactionClient.award.deleteMany({ where: { resumeId } });
-
+    const deleteResume = await transactionClient.resume.delete({
+      where: {
+        id: resumeId,
+      },
+    });
     return deleteResume;
   });
 
   return result;
+};
+const resumeSectionCompletionStatusFromDB = async (id: string) => {
+  const resume = await prisma.resume.findUniqueOrThrow({
+    where: {
+      id,
+    },
+    include: {
+      WorkExperience: true,
+      Education: true,
+      Skill: true,
+      Project: true,
+      Certification: true,
+      Award: true,
+    },
+  });
+  let isWorkExperienceSectionComplete = false;
+  let isAwardSectionComplete = false;
+  //   let isProjectSectionComplete = false;
+  //   let isEducationSectionComplete = false;
+  let isCertificationSectionComplete = false;
+  //   let isCertificationSectionComplete = false;
+  //   let isCertificationSectionComplete = false;
+  if (resume.WorkExperience.length > 0) {
+    resume.WorkExperience.map(
+      ({ companyName, jobTitle, location, startDate, responsibilities }) => {
+        if (
+          companyName === workExperienceData.companyName ||
+          jobTitle === workExperienceData.jobTitle ||
+          location === workExperienceData.location ||
+          responsibilities === workExperienceData.responsibilities
+        ) {
+          isWorkExperienceSectionComplete = false;
+        } else if (
+          companyName === null ||
+          jobTitle === null ||
+          location === null ||
+          startDate === null
+        ) {
+          isWorkExperienceSectionComplete = false;
+        } else {
+          isWorkExperienceSectionComplete = true;
+        }
+      }
+    );
+  }
+  if (resume.Award.length > 0) {
+    resume.Award.map(({ name, organization, year, description }) => {
+      if (
+        name === awardData.name ||
+        organization === awardData.organization ||
+        year === awardData.year ||
+        description === awardData.description
+      ) {
+        isAwardSectionComplete = false;
+      } else if (name === null || organization === null || year === null) {
+        isAwardSectionComplete = false;
+      } else {
+        isAwardSectionComplete = true;
+      }
+    });
+  }
+  if (resume.Certification.length > 0) {
+    resume.Certification.map(({ name, certificateLink, issueDate, issuer }) => {
+      if (
+        name === certificationData.name ||
+        issuer === certificationData.issuer ||
+        issueDate === certificationData.issueDate ||
+        certificateLink === certificationData.certificateLink
+      ) {
+        isCertificationSectionComplete = false;
+      } else if (name === null || issuer === null || issueDate === null) {
+        isCertificationSectionComplete = false;
+      } else {
+        isCertificationSectionComplete = true;
+      }
+    });
+  }
+  if (resume.Certification.length > 0) {
+    resume.Certification.map(({ name, certificateLink, issueDate, issuer }) => {
+      if (
+        name === certificationData.name ||
+        issuer === certificationData.issuer ||
+        issueDate === certificationData.issueDate ||
+        certificateLink === certificationData.certificateLink
+      ) {
+        isCertificationSectionComplete = false;
+      } else if (name === null || issuer === null || issueDate === null) {
+        isCertificationSectionComplete = false;
+      } else {
+        isCertificationSectionComplete = true;
+      }
+    });
+  }
+  if (resume.Certification.length > 0) {
+    resume.Certification.map(({ name, certificateLink, issueDate, issuer }) => {
+      if (
+        name === certificationData.name ||
+        issuer === certificationData.issuer ||
+        issueDate === certificationData.issueDate ||
+        certificateLink === certificationData.certificateLink
+      ) {
+        isCertificationSectionComplete = false;
+      } else if (name === null || issuer === null || issueDate === null) {
+        isCertificationSectionComplete = false;
+      } else {
+        isCertificationSectionComplete = true;
+      }
+    });
+  }
+  if (resume.Certification.length > 0) {
+    resume.Certification.map(({ name, certificateLink, issueDate, issuer }) => {
+      if (
+        name === certificationData.name ||
+        issuer === certificationData.issuer ||
+        issueDate === certificationData.issueDate ||
+        certificateLink === certificationData.certificateLink
+      ) {
+        isCertificationSectionComplete = false;
+      } else if (name === null || issuer === null || issueDate === null) {
+        isCertificationSectionComplete = false;
+      } else {
+        isCertificationSectionComplete = true;
+      }
+    });
+  }
+
+  return {
+    isAwardSectionComplete,
+    isWorkExperienceSectionComplete,
+    isCertificationSectionComplete,
+  };
 };
 export const resumeServices = {
   createResumeIntoDB,
@@ -197,4 +333,5 @@ export const resumeServices = {
   geAllUserResumeFromDB,
   updateResumeIntoDB,
   deleteUserResumeFromDB,
+  resumeSectionCompletionStatusFromDB,
 };
