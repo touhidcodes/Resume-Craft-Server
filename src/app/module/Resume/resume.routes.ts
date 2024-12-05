@@ -47,6 +47,11 @@ router.get(
   auth(UserRole.ADMIN, UserRole.USER),
   resumeControllers.getAllUserResume
 );
+router.get(
+  '/status-resume/:id',
+  auth(UserRole.ADMIN, UserRole.USER),
+  resumeControllers.resumeSectionCompletionStatus
+);
 router.patch(
   '/update-resume/:id',
   auth(UserRole.ADMIN, UserRole.USER),

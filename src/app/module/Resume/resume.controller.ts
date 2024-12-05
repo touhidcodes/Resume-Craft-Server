@@ -45,10 +45,22 @@ const updateResume = catchAsync(async (req, res) => {
     data: result,
   });
 });
+const resumeSectionCompletionStatus = catchAsync(async (req, res) => {
+  const result = await resumeServices.resumeSectionCompletionStatusFromDB(
+    req.params.id
+  );
+  sendRes(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Resume update successfully',
+    data: result,
+  });
+});
 
 export const resumeControllers = {
   createResume,
   getResume,
   getAllUserResume,
   updateResume,
+  resumeSectionCompletionStatus,
 };
