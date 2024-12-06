@@ -20,9 +20,9 @@ router.post(
   '/create-resume',
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   (req: Request, res: Response, next: NextFunction) => {
-    const { templateId } = req.body;
+    const { templateId, name } = req.body;
     const data = {
-      resumeData: { templateId, ...resumeData },
+      resumeData: { templateId, name, ...resumeData },
       workExperienceData,
       educationData,
       skillData,
@@ -47,11 +47,21 @@ router.get(
   auth(UserRole.ADMIN, UserRole.USER),
   resumeControllers.getAllUserResume
 );
+router.get(
+  '/status-resume/:id',
+  auth(UserRole.ADMIN, UserRole.USER),
+  resumeControllers.resumeSectionCompletionStatus
+);
 router.patch(
   '/update-resume/:id',
   auth(UserRole.ADMIN, UserRole.USER),
   validateRequest(UpdateResumeSchema),
   resumeControllers.updateResume
+);
+router.get(
+  '/delete-resume/:resumeId',
+  auth(UserRole.ADMIN, UserRole.USER),
+  resumeControllers.deleteResume
 );
 
 export const resumeRoutes = router;

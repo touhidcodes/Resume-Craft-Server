@@ -6,8 +6,9 @@ import { resumeRoutes } from '../module/Resume/resume.routes';
 import { workExperienceRoutes } from '../module/WorkExperience/workExperience.routes';
 import { educationRoutes } from '../module/Education/education.routes';
 import { awardRoutes } from '../module/Award/award.routes';
-// import { analyticsRoutes } from '../module/AdminDashboard/Analytics/analytics.route';
 import { skillRoutes } from '../module/Skill/skill.routes';
+import { analyticsRoutes } from '../module/AdminDashboard/Analytics/analytics.routes';
+import { certificationRoutes } from '../module/Certification/certification.routes';
 
 const router = Router();
 
@@ -44,10 +45,14 @@ const moduleRoutes: { path: string; route: Router }[] = [
     path: '/skill',
     route: skillRoutes,
   },
-//   {
-//     path: '/analytics',
-//     route: analyticsRoutes,
-//   },
+  {
+    path: '/analytics',
+    route: analyticsRoutes,
+  },
+  {
+    path: '/certificate',
+    route: certificationRoutes,
+  },
 ];
 moduleRoutes.forEach((route) => router.use(route.path, route.route));
 
