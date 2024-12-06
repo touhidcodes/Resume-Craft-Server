@@ -127,7 +127,7 @@ const updateResumeIntoDB = async (
   });
   const { design, personalInfo, templateId, ...remainingResumeData } =
     resumeUpdateData;
-  if (!templateId) {
+  if (templateId) {
     await prisma.template.findUniqueOrThrow({ where: { id: templateId } });
   }
   const modifiedUpdatedData = {
