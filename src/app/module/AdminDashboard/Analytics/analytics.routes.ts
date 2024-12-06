@@ -7,7 +7,6 @@ const router = express.Router();
 router.get(
   '/admin-dashboard-data',
   auth(UserRole.ADMIN),
-
   AnalyticsController.getAnalytics
 );
 
