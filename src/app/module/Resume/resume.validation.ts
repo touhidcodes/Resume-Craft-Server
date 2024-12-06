@@ -12,10 +12,10 @@ const PersonalInfoSchema = z.object({
   location: z.string(),
 });
 const UpdatePersonalInfoSchema = z.object({
-  fullName: z.string().min(1).optional(),
-  jobTitle: z.string().min(1).optional(),
+  fullName: z.string().optional(),
+  jobTitle: z.string().optional(),
   email: z.string().email().optional(),
-  phone: z.string().min(1).optional(),
+  phone: z.string().optional(),
   website: z.string().url().optional().optional(),
   linkedin: z.string().url().optional().optional(),
   github: z.string().url().optional().optional(),
@@ -28,8 +28,8 @@ const StyleSchema = z.object({
   color: z.string().min(1),
 });
 const UpdateStyleSchema = z.object({
-  fontSize: z.string().min(1).optional(),
-  color: z.string().min(1).optional(),
+  fontSize: z.string().optional(),
+  color: z.string().optional(),
 });
 
 // Section Styles Schema
@@ -50,9 +50,9 @@ const DesignSchema = z.object({
   sectionStyles: SectionStylesSchema,
 });
 const UpdateDesignSchema = z.object({
-  font: z.string().min(1).optional(),
-  themeColor: z.string().min(1).optional(),
-  backgroundColor: z.string().min(1).optional(),
+  font: z.string().optional(),
+  themeColor: z.string().optional(),
+  backgroundColor: z.string().optional(),
   sectionStyles: UpdateSectionStylesSchema.optional(),
 });
 
@@ -78,11 +78,11 @@ export const CreateWorkExperienceSchema = z.object({
   }),
 });
 export const UpdateWorkExperienceSchema = z.object({
-  companyName: z.string().min(1).optional(),
-  jobTitle: z.string().min(1).optional(),
+  companyName: z.string().optional(),
+  jobTitle: z.string().optional(),
   startDate: z.string().optional(),
   endDate: z.string().optional(),
-  location: z.string().min(1).optional(),
+  location: z.string().optional(),
   responsibilities: z.string().optional(),
 });
 
@@ -93,7 +93,7 @@ const EducationSchema = z.object({
   startDate: z.string(),
   endDate: z.string().optional(),
   location: z.string().min(1),
-  description: z.string().min(1).optional(),
+  description: z.string().optional(),
 });
 
 export const CreateEducationSchema = z.object({
@@ -104,16 +104,16 @@ export const CreateEducationSchema = z.object({
     startDate: z.string(),
     endDate: z.string().optional(),
     location: z.string().min(1),
-    description: z.string().min(1).optional(),
+    description: z.string().optional(),
   }),
 });
 export const UpdateEducationSchema = z.object({
-  institution: z.string().min(1).optional(),
-  degree: z.string().min(1).optional(),
+  institution: z.string().optional(),
+  degree: z.string().optional(),
   startDate: z.string().optional(),
   endDate: z.string().optional(),
-  location: z.string().min(1).optional(),
-  description: z.string().min(1).optional(),
+  location: z.string().optional(),
+  description: z.string().optional(),
 });
 
 // Skill Schema
@@ -129,7 +129,7 @@ const SkillSchema = z.object({
   skills: z.array(z.string().min(1)),
 });
 export const UpdateSkillSchema = z.object({
-  category: z.string().min(1).optional(),
+  category: z.string().optional(),
   skills: z.array(z.string().min(1)).optional(),
 });
 
@@ -141,7 +141,7 @@ export const CreateCertificationSchema = z.object({
     issuer: z.string().min(1),
     issueDate: z.string(),
     expirationDate: z.string().optional(),
-    certificateLink: z.string().min(1).optional(),
+    certificateLink: z.string().optional(),
   }),
 });
 const CertificationSchema = z.object({
@@ -149,14 +149,14 @@ const CertificationSchema = z.object({
   issuer: z.string().min(1),
   issueDate: z.string(),
   expirationDate: z.string().optional(),
-  certificateLink: z.string().min(1).optional(),
+  certificateLink: z.string().optional(),
 });
 export const UpdateCertificationSchema = z.object({
-  name: z.string().min(1).optional(),
-  issuer: z.string().min(1).optional(),
+  name: z.string().optional(),
+  issuer: z.string().optional(),
   issueDate: z.string().optional(),
   expirationDate: z.string().optional(),
-  certificateLink: z.string().min(1).optional(),
+  certificateLink: z.string().optional(),
 });
 
 // Project Schema
@@ -164,7 +164,7 @@ export const CreateProjectSchema = z.object({
   body: z.object({
     resumeId: z.string(),
     name: z.string().min(1),
-    description: z.string().min(1).optional(),
+    description: z.string().optional(),
     technologies: z.array(z.string().min(1)),
     role: z.string().min(1),
     link: z.string().url().optional(),
@@ -172,14 +172,14 @@ export const CreateProjectSchema = z.object({
 });
 export const UpdateProjectSchema = z.object({
   name: z.string().min(1),
-  description: z.string().min(1).optional(),
+  description: z.string().optional(),
   technologies: z.array(z.string().min(1)),
   role: z.string().min(1),
   link: z.string().url().optional(),
 });
 const ProjectSchema = z.object({
   name: z.string().min(1),
-  description: z.string().min(1).optional(),
+  description: z.string().optional(),
   technologies: z.array(z.string().min(1)),
   role: z.string().min(1),
   link: z.string().url().optional(),
@@ -192,20 +192,20 @@ export const CreateAwardSchema = z.object({
     name: z.string().min(1),
     organization: z.string().min(1),
     year: z.number().int(),
-    description: z.string().min(1).optional(),
+    description: z.string().optional(),
   }),
 });
 const AwardSchema = z.object({
   name: z.string().min(1),
   organization: z.string().min(1),
   year: z.number().int(),
-  description: z.string().min(1).optional(),
+  description: z.string().optional(),
 });
 export const UpdateAwardSchema = z.object({
-  name: z.string().min(1).optional(),
-  organization: z.string().min(1).optional(),
+  name: z.string().optional(),
+  organization: z.string().optional(),
   year: z.number().int().optional(),
-  description: z.string().min(1).optional(),
+  description: z.string().optional(),
 });
 
 // Language Schema
@@ -214,8 +214,8 @@ const LanguageSchema = z.object({
   proficiency: z.string().min(1),
 });
 const UpdateLanguageSchema = z.object({
-  name: z.string().min(1).optional(),
-  proficiency: z.string().min(1).optional(),
+  name: z.string().optional(),
+  proficiency: z.string().optional(),
 });
 const SectionSchema = z.object({
   name: z.string(),
@@ -237,7 +237,7 @@ export const ResumeSchema = z.object({
 });
 export const UpdateResumeSchema = z.object({
   personalInfo: UpdatePersonalInfoSchema.optional(),
-  profileSummary: z.string().min(1).optional(),
+  profileSummary: z.string().optional(),
   hobby: z.array(z.string().min(1)).optional(),
   design: UpdateDesignSchema.optional(),
   language: z.array(UpdateLanguageSchema).optional(),
