@@ -10,6 +10,8 @@ import { skillRoutes } from '../module/Skill/skill.routes';
 import { analyticsRoutes } from '../module/AdminDashboard/Analytics/analytics.routes';
 import { projectRoutes } from '../module/Project/project.routes';
 import { certificationRoutes } from '../module/Certification/certification.routes';
+import { coverLetterTemplateRoutes } from '../module/CoverLetterTemplate/coverLetterTemplate.routes';
+import { coverLetterRoutes } from '../module/CoverLetter/coverLetter.routes';
 
 const router = Router();
 
@@ -57,6 +59,14 @@ const moduleRoutes: { path: string; route: Router }[] = [
   {
     path: '/analytics',
     route: analyticsRoutes,
+  },
+  {
+    path: '/cover-letter',
+    route: coverLetterRoutes,
+  },
+  {
+    path: '/cover-letter-template',
+    route: coverLetterTemplateRoutes,
   },
 ];
 moduleRoutes.forEach((route) => router.use(route.path, route.route));
