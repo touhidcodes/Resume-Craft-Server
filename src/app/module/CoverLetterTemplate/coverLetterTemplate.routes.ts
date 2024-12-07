@@ -21,5 +21,8 @@ router.get(
   '/templates',
   coverLatterTemplateControllers.getAllCoverLatterTemplate
 );
-
+router.get(
+  '/remove-template/:id',auth(UserRole.ADMIN),
+  coverLatterTemplateControllers.deleteCoverLetterTemplate
+);
 export const coverLetterTemplateRoutes = router;

@@ -2,6 +2,7 @@ import { Template } from '@prisma/client';
 import { prisma } from '../../../app';
 
 const createTemplateIntoDB = async (template: Template) => {
+    
   const result = await prisma.template.create({ data: template });
   return result;
 };
@@ -17,8 +18,20 @@ const getAllTemplateFromDB = async () => {
   const result = await prisma.template.findMany({});
   return result;
 };
+const deleteTemplateFromDB = async (id: string) => {
+  const result = await prisma.template.update({
+    where: {
+      id,
+    },
+    data: {
+      isDeleted: true,
+    },
+  });
+  return result;
+};
 export const templateServices = {
   createTemplateIntoDB,
   getATemplateFromDB,
   getAllTemplateFromDB,
+  deleteTemplateFromDB,
 };

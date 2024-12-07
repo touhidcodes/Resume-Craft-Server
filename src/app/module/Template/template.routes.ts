@@ -5,7 +5,6 @@ import { UserRole } from '@prisma/client';
 import { templateControllers } from './template.controller';
 import { TemplateSchema } from './template.validation';
 
-
 const router = express.Router();
 //login user route
 router.post(
@@ -16,5 +15,10 @@ router.post(
 );
 router.get('/template/:templateId', templateControllers.getATemplate);
 router.get('/templates', templateControllers.getAllTemplate);
+router.get(
+  '/remove-template/:id',
+  auth(UserRole.ADMIN),
+  templateControllers.deleteTemplate
+);
 
 export const templateRoutes = router;
