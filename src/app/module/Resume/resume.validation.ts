@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 // Personal Info Schema
-const PersonalInfoSchema = z.object({
+export const PersonalInfoSchema = z.object({
   fullName: z.string(),
   jobTitle: z.string(),
   email: z.string().email(),
@@ -11,7 +11,7 @@ const PersonalInfoSchema = z.object({
   github: z.string().url().optional(),
   location: z.string(),
 });
-const UpdatePersonalInfoSchema = z.object({
+export const UpdatePersonalInfoSchema = z.object({
   fullName: z.string().optional(),
   jobTitle: z.string().optional(),
   email: z.string().email().optional(),
