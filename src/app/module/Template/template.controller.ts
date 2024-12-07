@@ -32,9 +32,19 @@ const getAllTemplate = catchAsync(async (req, res) => {
     data: result,
   });
 });
+const deleteTemplate = catchAsync(async (req, res) => {
+  const result = await templateServices.deleteTemplateFromDB(req.params.id);
+  sendRes(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Template found successfully',
+    data: result,
+  });
+});
 
 export const templateControllers = {
   createTemplate,
   getATemplate,
   getAllTemplate,
+  deleteTemplate,
 };

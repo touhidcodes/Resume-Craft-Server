@@ -11,6 +11,9 @@ export const createCoverLetterIntoDB = async (
   await prisma.user.findUniqueOrThrow({
     where: { id: decodeToken.userId },
   });
+  await prisma.template.findUniqueOrThrow({
+    where: { id: coverLetterData.templateId, isDeleted: false },
+  });
   const createdCoverLetter = await prisma.coverLetter.create({
     data: { ...coverLetterData, userId: decodeToken.userId },
   });
@@ -66,7 +69,8 @@ const updateCoverLetterIntoDB = async (
   }
   if (recipient && Object.keys(recipient).length) {
     for (const [key, value] of Object.entries(recipient)) {
-      modifiedUpdatedData.recipient[`${key as keyof typeof recipient}`] = value;
+      modifiedUpdatedData.recipient[`${key as keyof typeof recipient}`] =
+        value as string;
     }
   }
 
