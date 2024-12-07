@@ -116,6 +116,7 @@ const geAllUserResumeFromDB = async (userId: string) => {
   });
   return result;
 };
+
 const updateResumeIntoDB = async (
   id: string,
   resumeUpdateData: Partial<Resume>
@@ -128,8 +129,7 @@ const updateResumeIntoDB = async (
 
   const { design, personalInfo, templateId, ...remainingResumeData } =
     resumeUpdateData;
-
-  if (!templateId) {
+  if (templateId) {
     await prisma.template.findUniqueOrThrow({ where: { id: templateId } });
   }
 
