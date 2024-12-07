@@ -13,16 +13,25 @@ const getACoverLetterTemplateFromDB = async (id: string) => {
   const result = await prisma.coverLetterTemplate.findUniqueOrThrow({
     where: {
       id,
+      isDeleted: false,
     },
   });
   return result;
 };
 const getAllCoverLetterTemplateFromDB = async () => {
-  const result = await prisma.coverLetterTemplate.findMany({});
+  const result = await prisma.coverLetterTemplate.findMany({
+    where: { isDeleted: false },
+  });
   return result;
 };
 
 const deleteCoverLetterTemplateFromDB = async (id: string) => {
+  await prisma.coverLetterTemplate.findUniqueOrThrow({
+    where: {
+      id,
+      isDeleted: false,
+    },
+  });
   const result = await prisma.template.update({
     where: {
       id,
