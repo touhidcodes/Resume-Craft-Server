@@ -14,19 +14,20 @@ generator client {
 }
 
 model User {
-    id        String     @id @default(auto()) @map("_id") @db.ObjectId
-    userName  String     @unique
-    email     String     @unique
-    password  String
-    phone     String?
-    bio       String?
-    country   String?
-    city      String?
-    role      UserRole
-    status    UserStatus @default(ACTIVE)
-    createdAt DateTime   @default(now())
-    updatedAt DateTime   @updatedAt
-    Resume    Resume[]
+    id          String        @id @default(auto()) @map("_id") @db.ObjectId
+    userName    String        @unique
+    email       String        @unique
+    password    String
+    phone       String?
+    bio         String?
+    country     String?
+    city        String?
+    role        UserRole
+    status      UserStatus    @default(ACTIVE)
+    createdAt   DateTime      @default(now())
+    updatedAt   DateTime      @updatedAt
+    Resume      Resume[]
+    CoverLetter CoverLetter[]
 
     @@map("users")
 }
@@ -189,4 +190,40 @@ model Award {
     description  String?
     createdAt    DateTime @default(now())
     updatedAt    DateTime @updatedAt
+}
+
+model CoverLetterTemplate {
+    id          String        @id @default(auto()) @map("_id") @db.ObjectId
+    image       String
+    name        String
+    createdAt   DateTime      @default(now())
+    updatedAt   DateTime      @updatedAt
+    isDeleted   Boolean       @default(false)
+    CoverLatter CoverLetter[]
+}
+
+model CoverLetter {
+    id           String              @id @default(auto()) @map("_id") @db.ObjectId
+    name         String
+    userId       String              @db.ObjectId
+    user         User                @relation(fields: [userId], references: [id])
+    templateId   String              @db.ObjectId
+    template     CoverLetterTemplate @relation(fields: [templateId], references: [id])
+    personalInfo PersonalInfo
+    body         String
+    closing      String
+    recipient    Recipient
+    date         String
+    createdAt    DateTime            @default(now())
+    updatedAt    DateTime            @updatedAt
+}
+
+type Recipient {
+    name           String
+    email          String
+    position       String
+    companyName    String
+    companyEmail   String
+    companyWebsite String?
+    address        String
 }
