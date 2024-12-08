@@ -109,6 +109,7 @@ const geAllUserResumeFromDB = async (userId: string) => {
       userId,
     },
     include: {
+      template: true,
       WorkExperience: true,
       Education: true,
       Skill: true,
@@ -135,7 +136,7 @@ const updateResumeIntoDB = async (
   }
   const modifiedUpdatedData = {
     ...remainingResumeData,
-    templateId: templateId,
+    templateId,
     personalInfo: resumeData.personalInfo,
     design: resumeData.design,
   };
