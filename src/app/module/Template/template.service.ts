@@ -15,6 +15,7 @@ const getATemplateFromDB = async (id: string) => {
 };
 const getAllTemplateFromDB = async () => {
   const result = await prisma.template.findMany({});
+
   return result;
 };
 export const templateServices = {
