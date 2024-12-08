@@ -43,6 +43,9 @@ export const createResumeIntoDB = async (
     await transactionClient.user.findUniqueOrThrow({
       where: { id: decodeToken.userId },
     });
+    await transactionClient.template.findUniqueOrThrow({
+      where: { id: resumeData.templateId, isDeleted: false },
+    });
     const createdResume = await transactionClient.resume.create({
       data: { ...resumeData, userId: decodeToken.userId },
     });

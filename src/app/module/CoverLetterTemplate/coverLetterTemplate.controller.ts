@@ -37,9 +37,21 @@ const getAllCoverLatterTemplate = catchAsync(async (req, res) => {
     data: result,
   });
 });
-
+const deleteCoverLetterTemplate = catchAsync(async (req, res) => {
+  const result =
+    await coverLetterTemplateServices.deleteCoverLetterTemplateFromDB(
+      req.params.id
+    );
+  sendRes(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Cover Letter Template deleted successfully',
+    data: result,
+  });
+});
 export const coverLatterTemplateControllers = {
   createCoverLatterTemplate,
   getACoverLatterTemplate,
   getAllCoverLatterTemplate,
+  deleteCoverLetterTemplate,
 };
