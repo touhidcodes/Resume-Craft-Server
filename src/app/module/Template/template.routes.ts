@@ -15,7 +15,7 @@ router.post(
 );
 router.get('/template/:templateId', templateControllers.getATemplate);
 router.get('/templates', templateControllers.getAllTemplate);
-router.get(
+router.delete(
   '/remove-template/:id',
   auth(UserRole.ADMIN),
   templateControllers.deleteTemplate

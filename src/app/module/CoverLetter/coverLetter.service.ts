@@ -34,6 +34,9 @@ const getUserAllCoverLetterFromDB = async (userId: string) => {
     where: {
       userId,
     },
+    include: {
+      template: true,
+    },
   });
   return result;
 };
