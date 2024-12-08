@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   Award,
   Certification,
@@ -86,10 +87,13 @@ export const createResumeIntoDB = async (
 
   return result;
 };
-const getResumeFromDB = async (id: string, userId: string) => {
-  const result = await prisma.resume.findUniqueOrThrow({
+const createDuplicateResumeIntoDB = async (
+  oldResumeId: string,
+  userId: string
+) => {
+  const resume = await prisma.resume.findUniqueOrThrow({
     where: {
-      id,
+      id: oldResumeId,
       userId,
     },
     include: {
@@ -101,6 +105,112 @@ const getResumeFromDB = async (id: string, userId: string) => {
       Award: true,
     },
   });
+  const {
+    WorkExperience,
+    Education,
+    Skill,
+    Project,
+    Certification,
+    Award,
+    id,
+    createdAt,
+    updatedAt,
+    ...resumeData
+  } = resume;
+  const result = await prisma.$transaction(async (transactionClient) => {
+    await transactionClient.user.findUniqueOrThrow({
+      where: { id: userId },
+    });
+    await transactionClient.template.findUniqueOrThrow({
+      where: { id: resumeData.templateId, isDeleted: false },
+    });
+    const createdResume = await transactionClient.resume.create({
+      data: { ...resumeData },
+    });
+    const newResumeId = createdResume.id;
+    Promise.all(
+      WorkExperience.map(
+        async ({
+          id,
+          resumeId,
+          createdAt,
+          updatedAt,
+          ...workExperienceData
+        }) => {
+          await transactionClient.workExperience.create({
+            data: { ...workExperienceData, resumeId: newResumeId },
+          });
+        }
+      )
+    );
+    Promise.all(
+      Education.map(
+        async ({ id, resumeId, createdAt, updatedAt, ...educationData }) => {
+          await transactionClient.education.create({
+            data: { ...educationData, resumeId: newResumeId },
+          });
+        }
+      )
+    );
+    Promise.all(
+      Skill.map(
+        async ({ id, resumeId, createdAt, updatedAt, ...skillData }) => {
+          await transactionClient.skill.create({
+            data: { ...skillData, resumeId: newResumeId },
+          });
+        }
+      )
+    );
+    Promise.all(
+      Project.map(
+        async ({ id, resumeId, createdAt, updatedAt, ...projectData }) => {
+          await transactionClient.project.create({
+            data: { ...projectData, resumeId: newResumeId },
+          });
+        }
+      )
+    );
+    Promise.all(
+      Certification.map(
+        async ({
+          id,
+          resumeId,
+          createdAt,
+          updatedAt,
+          ...certificationData
+        }) => {
+          await transactionClient.certification.create({
+            data: { ...certificationData, resumeId: newResumeId },
+          });
+        }
+      )
+    );
+    Promise.all(
+      Award.map(
+        async ({ id, resumeId, createdAt, updatedAt, ...awardData }) => {
+          await transactionClient.award.create({
+            data: { ...awardData, resumeId: newResumeId },
+          });
+        }
+      )
+    );
+
+    const fullResumeData = await transactionClient.resume.findUniqueOrThrow({
+      where: {
+        id: newResumeId,
+      },
+      include: {
+        WorkExperience: true,
+        Education: true,
+        Skill: true,
+        Project: true,
+        Certification: true,
+        Award: true,
+      },
+    });
+    return fullResumeData;
+  });
+
   return result;
 };
 const geAllUserResumeFromDB = async (userId: string) => {
@@ -419,11 +529,31 @@ const resumeSectionCompletionStatusFromDB = async (id: string) => {
     isLanguageSectionComplete,
   };
 };
+const getResumeFromDB = async (id: string, userId: string) => {
+  const result = await prisma.resume.findUniqueOrThrow({
+    where: {
+      id,
+      userId,
+    },
+    include: {
+      WorkExperience: true,
+      Education: true,
+      Skill: true,
+      Project: true,
+      Certification: true,
+      Award: true,
+    },
+  });
+  const resumeSectionCompletionStatus =
+    await resumeSectionCompletionStatusFromDB(id);
+  return { resume: result, resumeSectionCompletionStatus };
+};
+
 export const resumeServices = {
   createResumeIntoDB,
   getResumeFromDB,
   geAllUserResumeFromDB,
   updateResumeIntoDB,
   deleteUserResumeFromDB,
-  resumeSectionCompletionStatusFromDB,
+  createDuplicateResumeIntoDB,
 };
