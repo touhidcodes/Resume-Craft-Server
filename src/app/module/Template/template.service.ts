@@ -15,10 +15,32 @@ const getATemplateFromDB = async (id: string) => {
   return result;
 };
 const getAllTemplateFromDB = async () => {
-  const result = await prisma.template.findMany({
-    where: { isDeleted: false },
+  const popularTemplates = await prisma.resume.aggregateRaw({
+    pipeline: [
+      { $group: { _id: '$templateId', count: { $sum: 1 } } },
+      { $sort: { count: -1 } },
+      { $limit: 5 },
+    ],
   });
-  return result;
+  return Promise.all(
+    (
+      popularTemplates as unknown as {
+        _id: {
+          $oid: string;
+        };
+        count: number;
+      }[]
+    ).map(async ({ _id, count }) => {
+      const templateDetails = await prisma.template.findUnique({
+        where: { id: _id.$oid, isDeleted: false },
+      });
+
+      return {
+        ...templateDetails,
+        usageCount: count,
+      };
+    })
+  );
 };
 const deleteTemplateFromDB = async (id: string) => {
   await prisma.template.findUniqueOrThrow({

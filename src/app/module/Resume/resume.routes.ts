@@ -37,6 +37,11 @@ router.post(
   validateRequest(CreateResumeSchema),
   resumeControllers.createResume
 );
+router.post(
+  '/create-resume-duplicate/:resumeId',
+  auth(UserRole.ADMIN, UserRole.USER),
+  resumeControllers.createDuplicateResume
+);
 router.get(
   '/resume/:resumeId',
   auth(UserRole.ADMIN, UserRole.USER),
@@ -46,11 +51,6 @@ router.get(
   '/resumes',
   auth(UserRole.ADMIN, UserRole.USER),
   resumeControllers.getAllUserResume
-);
-router.get(
-  '/status-resume/:id',
-  auth(UserRole.ADMIN, UserRole.USER),
-  resumeControllers.resumeSectionCompletionStatus
 );
 router.patch(
   '/update-resume/:id',
