@@ -83,7 +83,7 @@ const getPopularTemplates = async () => {
 
 // 4. Get total resume count
 const getTotalResumeCount = async () => {
-  return prisma.resume.count();
+  return await prisma.resume.count();
 };
 
 const getAnalytics = async () => {
