@@ -35,7 +35,7 @@ router.post(
 );
 router.post(
   '/register-admin/:id',
-  // auth(UserRole.ADMIN),
+  auth(UserRole.ADMIN),
   userController.createAdmin
 );
 
