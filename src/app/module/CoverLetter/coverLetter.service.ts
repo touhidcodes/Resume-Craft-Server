@@ -11,7 +11,7 @@ export const createCoverLetterIntoDB = async (
   await prisma.user.findUniqueOrThrow({
     where: { id: decodeToken.userId },
   });
-  await prisma.template.findUniqueOrThrow({
+  await prisma.coverLetterTemplate.findUniqueOrThrow({
     where: { id: coverLetterData.templateId, isDeleted: false },
   });
   const createdCoverLetter = await prisma.coverLetter.create({

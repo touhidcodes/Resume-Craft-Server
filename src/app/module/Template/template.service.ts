@@ -19,7 +19,6 @@ const getAllTemplateFromDB = async () => {
     pipeline: [
       { $group: { _id: '$templateId', count: { $sum: 1 } } },
       { $sort: { count: -1 } },
-      { $limit: 5 },
     ],
   });
   return Promise.all(
