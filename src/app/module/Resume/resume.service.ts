@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   Award,
   Certification,
@@ -86,10 +87,13 @@ export const createResumeIntoDB = async (
 
   return result;
 };
-const getResumeFromDB = async (id: string, userId: string) => {
-  const result = await prisma.resume.findUniqueOrThrow({
+const createDuplicateResumeIntoDB = async (
+  oldResumeId: string,
+  userId: string
+) => {
+  const resume = await prisma.resume.findUniqueOrThrow({
     where: {
-      id,
+      id: oldResumeId,
       userId,
     },
     include: {
@@ -101,6 +105,112 @@ const getResumeFromDB = async (id: string, userId: string) => {
       Award: true,
     },
   });
+  const {
+    WorkExperience,
+    Education,
+    Skill,
+    Project,
+    Certification,
+    Award,
+    id,
+    createdAt,
+    updatedAt,
+    ...resumeData
+  } = resume;
+  const result = await prisma.$transaction(async (transactionClient) => {
+    await transactionClient.user.findUniqueOrThrow({
+      where: { id: userId },
+    });
+    await transactionClient.template.findUniqueOrThrow({
+      where: { id: resumeData.templateId, isDeleted: false },
+    });
+    const createdResume = await transactionClient.resume.create({
+      data: { ...resumeData },
+    });
+    const newResumeId = createdResume.id;
+    Promise.all(
+      WorkExperience.map(
+        async ({
+          id,
+          resumeId,
+          createdAt,
+          updatedAt,
+          ...workExperienceData
+        }) => {
+          await transactionClient.workExperience.create({
+            data: { ...workExperienceData, resumeId: newResumeId },
+          });
+        }
+      )
+    );
+    Promise.all(
+      Education.map(
+        async ({ id, resumeId, createdAt, updatedAt, ...educationData }) => {
+          await transactionClient.education.create({
+            data: { ...educationData, resumeId: newResumeId },
+          });
+        }
+      )
+    );
+    Promise.all(
+      Skill.map(
+        async ({ id, resumeId, createdAt, updatedAt, ...skillData }) => {
+          await transactionClient.skill.create({
+            data: { ...skillData, resumeId: newResumeId },
+          });
+        }
+      )
+    );
+    Promise.all(
+      Project.map(
+        async ({ id, resumeId, createdAt, updatedAt, ...projectData }) => {
+          await transactionClient.project.create({
+            data: { ...projectData, resumeId: newResumeId },
+          });
+        }
+      )
+    );
+    Promise.all(
+      Certification.map(
+        async ({
+          id,
+          resumeId,
+          createdAt,
+          updatedAt,
+          ...certificationData
+        }) => {
+          await transactionClient.certification.create({
+            data: { ...certificationData, resumeId: newResumeId },
+          });
+        }
+      )
+    );
+    Promise.all(
+      Award.map(
+        async ({ id, resumeId, createdAt, updatedAt, ...awardData }) => {
+          await transactionClient.award.create({
+            data: { ...awardData, resumeId: newResumeId },
+          });
+        }
+      )
+    );
+
+    const fullResumeData = await transactionClient.resume.findUniqueOrThrow({
+      where: {
+        id: newResumeId,
+      },
+      include: {
+        WorkExperience: true,
+        Education: true,
+        Skill: true,
+        Project: true,
+        Certification: true,
+        Award: true,
+      },
+    });
+    return fullResumeData;
+  });
+
   return result;
 };
 const geAllUserResumeFromDB = async (userId: string) => {
@@ -221,16 +331,17 @@ const resumeSectionCompletionStatusFromDB = async (id: string) => {
       Award: true,
     },
   });
-  let isWorkExperienceSectionComplete = false;
-  let isEducationSectionComplete = false;
-  let isCertificationSectionComplete = false;
-  let isSkillSectionComplete = false;
-  let isProjectSectionComplete = false;
-  let isAwardSectionComplete = false;
-  let isSummarySectionComplete = false;
-  let isHeaderSectionComplete = false;
-  let isLanguageSectionComplete = false;
-  let isHobbySectionComplete = false;
+  let Header = false;
+  let Summary = false;
+  let Experience = false;
+  let Education = false;
+  let Skills = false;
+  let Certificate = false;
+  let Projects = false;
+  let Awards = false;
+  let Language = false;
+  let Hobby = false;
+
   if (resume.WorkExperience.length > 0) {
     resume.WorkExperience.map(
       ({ companyName, jobTitle, location, startDate, responsibilities }) => {
@@ -240,16 +351,16 @@ const resumeSectionCompletionStatusFromDB = async (id: string) => {
           location === workExperienceData.location ||
           responsibilities === workExperienceData.responsibilities
         ) {
-          isWorkExperienceSectionComplete = false;
+          Experience = false;
         } else if (
           companyName === null ||
           jobTitle === null ||
           location === null ||
           startDate === null
         ) {
-          isWorkExperienceSectionComplete = false;
+          Experience = false;
         } else {
-          isWorkExperienceSectionComplete = true;
+          Experience = true;
         }
       }
     );
@@ -262,11 +373,11 @@ const resumeSectionCompletionStatusFromDB = async (id: string) => {
         year === awardData.year ||
         description === awardData.description
       ) {
-        isAwardSectionComplete = false;
+        Awards = false;
       } else if (name === null || organization === null || year === null) {
-        isAwardSectionComplete = false;
+        Awards = false;
       } else {
-        isAwardSectionComplete = true;
+        Awards = true;
       }
     });
   }
@@ -278,11 +389,11 @@ const resumeSectionCompletionStatusFromDB = async (id: string) => {
         issueDate === certificationData.issueDate ||
         certificateLink === certificationData.certificateLink
       ) {
-        isCertificationSectionComplete = false;
+        Certificate = false;
       } else if (name === null || issuer === null || issueDate === null) {
-        isCertificationSectionComplete = false;
+        Certificate = false;
       } else {
-        isCertificationSectionComplete = true;
+        Certificate = true;
       }
     });
   }
@@ -297,16 +408,16 @@ const resumeSectionCompletionStatusFromDB = async (id: string) => {
         technologies === projectData.technologies ||
         description === projectData.description
       ) {
-        isProjectSectionComplete = false;
+        Projects = false;
       } else if (
         name === null ||
         link === null ||
         role === null ||
         technologies === null
       ) {
-        isProjectSectionComplete = false;
+        Projects = false;
       } else {
-        isProjectSectionComplete = true;
+        Projects = true;
       }
     });
   }
@@ -321,15 +432,15 @@ const resumeSectionCompletionStatusFromDB = async (id: string) => {
           (startDate === educationData.startDate &&
             endDate === educationData.endDate)
         ) {
-          isEducationSectionComplete = false;
+          Education = false;
         } else if (
           institution === null ||
           location === null ||
           degree === null
         ) {
-          isEducationSectionComplete = false;
+          Education = false;
         } else {
-          isEducationSectionComplete = true;
+          Education = true;
         }
       }
     );
@@ -337,11 +448,11 @@ const resumeSectionCompletionStatusFromDB = async (id: string) => {
   if (resume.Skill.length > 0) {
     resume.Skill.map(({ category, skills }) => {
       if (JSON.stringify(skills) === JSON.stringify(skillData.skills)) {
-        isSkillSectionComplete = false;
+        Skills = false;
       } else if (category === null || skills === null) {
-        isSkillSectionComplete = false;
+        Skills = false;
       } else {
-        isSkillSectionComplete = true;
+        Skills = true;
       }
     });
   }
@@ -366,7 +477,7 @@ const resumeSectionCompletionStatusFromDB = async (id: string) => {
       phone === resumeData.personalInfo.phone ||
       website === resumeData.personalInfo.website
     ) {
-      isHeaderSectionComplete = false;
+      Header = false;
     } else if (
       fullName === null ||
       email === null ||
@@ -377,56 +488,76 @@ const resumeSectionCompletionStatusFromDB = async (id: string) => {
       phone === null ||
       location === null
     ) {
-      isHeaderSectionComplete = false;
+      Header = false;
     } else {
-      isHeaderSectionComplete = true;
+      Header = true;
     }
   }
   if (resume.hobby) {
     if (JSON.stringify(resume.hobby) === JSON.stringify(resumeData.hobby)) {
-      isHobbySectionComplete = false;
+      Hobby = false;
     } else if (resume.hobby === null) {
-      isHobbySectionComplete = false;
+      Hobby = false;
     } else {
-      isHobbySectionComplete = true;
+      Hobby = true;
     }
   }
   if (resume.profileSummary) {
     if (resume.profileSummary === resumeData.profileSummary) {
-      isSummarySectionComplete = false;
+      Summary = false;
     } else if (resume.profileSummary === null) {
-      isSummarySectionComplete = false;
+      Summary = false;
     } else {
-      isSummarySectionComplete = true;
+      Summary = true;
     }
   }
   if (resume.language.length > 0) {
     resume.language.map(({ proficiency, name }) => {
       if (proficiency === null || name === null) {
-        isLanguageSectionComplete = false;
+        Language = false;
       } else {
-        isLanguageSectionComplete = true;
+        Language = true;
       }
     });
   }
   return {
-    isAwardSectionComplete,
-    isWorkExperienceSectionComplete,
-    isCertificationSectionComplete,
-    isProjectSectionComplete,
-    isSkillSectionComplete,
-    isEducationSectionComplete,
-    isSummarySectionComplete,
-    isHobbySectionComplete,
-    isHeaderSectionComplete,
-    isLanguageSectionComplete,
+    Header,
+    Summary,
+    Experience,
+    Skills,
+    Education,
+    Projects,
+    Certificate,
+    Awards,
+    Language,
+    Hobby,
   };
 };
+const getResumeFromDB = async (id: string, userId: string) => {
+  const result = await prisma.resume.findUniqueOrThrow({
+    where: {
+      id,
+      userId,
+    },
+    include: {
+      WorkExperience: true,
+      Education: true,
+      Skill: true,
+      Project: true,
+      Certification: true,
+      Award: true,
+    },
+  });
+  const resumeSectionCompletionStatus =
+    await resumeSectionCompletionStatusFromDB(id);
+  return { resume: result, resumeSectionCompletionStatus };
+};
+
 export const resumeServices = {
   createResumeIntoDB,
   getResumeFromDB,
   geAllUserResumeFromDB,
   updateResumeIntoDB,
   deleteUserResumeFromDB,
-  resumeSectionCompletionStatusFromDB,
+  createDuplicateResumeIntoDB,
 };
