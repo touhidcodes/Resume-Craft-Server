@@ -11,7 +11,7 @@ export const createCoverLetterIntoDB = async (
   await prisma.user.findUniqueOrThrow({
     where: { id: decodeToken.userId },
   });
-  await prisma.template.findUniqueOrThrow({
+  await prisma.coverLetterTemplate.findUniqueOrThrow({
     where: { id: coverLetterData.templateId, isDeleted: false },
   });
   const createdCoverLetter = await prisma.coverLetter.create({
@@ -33,6 +33,9 @@ const getUserAllCoverLetterFromDB = async (userId: string) => {
   const result = await prisma.coverLetter.findMany({
     where: {
       userId,
+    },
+    include: {
+      template: true,
     },
   });
   return result;

@@ -21,6 +21,7 @@ router.post(
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   (req: Request, res: Response, next: NextFunction) => {
     const { templateId, name } = req.body;
+
     const data = {
       resumeData: { templateId, name, ...resumeData },
       workExperienceData,
@@ -37,6 +38,11 @@ router.post(
   validateRequest(CreateResumeSchema),
   resumeControllers.createResume
 );
+router.post(
+  '/create-resume-duplicate/:resumeId',
+  auth(UserRole.ADMIN, UserRole.USER),
+  resumeControllers.createDuplicateResume
+);
 router.get(
   '/resume/:resumeId',
   auth(UserRole.ADMIN, UserRole.USER),
@@ -47,18 +53,13 @@ router.get(
   auth(UserRole.ADMIN, UserRole.USER),
   resumeControllers.getAllUserResume
 );
-router.get(
-  '/status-resume/:id',
-  auth(UserRole.ADMIN, UserRole.USER),
-  resumeControllers.resumeSectionCompletionStatus
-);
 router.patch(
   '/update-resume/:id',
   auth(UserRole.ADMIN, UserRole.USER),
   validateRequest(UpdateResumeSchema),
   resumeControllers.updateResume
 );
-router.get(
+router.delete(
   '/delete-resume/:resumeId',
   auth(UserRole.ADMIN, UserRole.USER),
   resumeControllers.deleteResume

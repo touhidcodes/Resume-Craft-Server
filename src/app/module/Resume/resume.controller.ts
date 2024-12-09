@@ -12,6 +12,18 @@ const createResume = catchAsync(async (req, res) => {
     data: result,
   });
 });
+const createDuplicateResume = catchAsync(async (req, res) => {
+  const result = await resumeServices.createDuplicateResumeIntoDB(
+    req.params.resumeId,
+    req.user.userId
+  );
+  sendRes(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Resume Created successfully',
+    data: result,
+  });
+});
 const getResume = catchAsync(async (req, res) => {
   const result = await resumeServices.getResumeFromDB(
     req.params.resumeId,
@@ -45,17 +57,6 @@ const updateResume = catchAsync(async (req, res) => {
     data: result,
   });
 });
-const resumeSectionCompletionStatus = catchAsync(async (req, res) => {
-  const result = await resumeServices.resumeSectionCompletionStatusFromDB(
-    req.params.id
-  );
-  sendRes(res, {
-    statusCode: httpStatus.OK,
-    success: true,
-    message: 'Resume update successfully',
-    data: result,
-  });
-});
 
 const deleteResume = catchAsync(async (req, res) => {
   const result = await resumeServices.deleteUserResumeFromDB(
@@ -72,8 +73,9 @@ const deleteResume = catchAsync(async (req, res) => {
 
 export const resumeControllers = {
   createResume,
+  createDuplicateResume,
   getResume,
   getAllUserResume,
   updateResume,
-  resumeSectionCompletionStatus,deleteResume
+  deleteResume,
 };
