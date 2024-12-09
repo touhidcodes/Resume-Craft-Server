@@ -3,7 +3,6 @@ import catchAsync from '../../shared/catchAsync';
 import { sendRes } from '../../shared/sendResponse';
 import { certificationServices } from './certification.service';
 
-
 const createCertification = catchAsync(async (req, res) => {
   const result = await certificationServices.createCertificationIntoDB(
     req.body
@@ -39,10 +38,9 @@ const getACertification = catchAsync(async (req, res) => {
   });
 });
 const getAllCertificationOfAResume = catchAsync(async (req, res) => {
-  const result =
-    await certificationServices.getAllCertificationOfAResumeFromDB(
-      req.params.resumeId
-    );
+  const result = await certificationServices.getAllCertificationOfAResumeFromDB(
+    req.params.resumeId
+  );
   sendRes(res, {
     statusCode: httpStatus.OK,
     success: true,

@@ -13,7 +13,7 @@ import { coverLetterControllers } from './coverLetter.controller';
 const router = express.Router();
 //login user route
 router.post(
-  '/create',
+  '/create-cover-letter',
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   (req: Request, res: Response, next: NextFunction) => {
     const { templateId, name } = req.body;

@@ -230,6 +230,7 @@ const geAllUserResumeFromDB = async (userId: string) => {
   });
   return result;
 };
+
 const updateResumeIntoDB = async (
   id: string,
   resumeUpdateData: Partial<Resume>
@@ -239,11 +240,13 @@ const updateResumeIntoDB = async (
       id,
     },
   });
+
   const { design, personalInfo, templateId, ...remainingResumeData } =
     resumeUpdateData;
   if (templateId) {
     await prisma.template.findUniqueOrThrow({ where: { id: templateId } });
   }
+
   const modifiedUpdatedData = {
     ...remainingResumeData,
     templateId,
@@ -328,16 +331,17 @@ const resumeSectionCompletionStatusFromDB = async (id: string) => {
       Award: true,
     },
   });
-  let isWorkExperienceSectionComplete = false;
-  let isEducationSectionComplete = false;
-  let isCertificationSectionComplete = false;
-  let isSkillSectionComplete = false;
-  let isProjectSectionComplete = false;
-  let isAwardSectionComplete = false;
-  let isSummarySectionComplete = false;
-  let isHeaderSectionComplete = false;
-  let isLanguageSectionComplete = false;
-  let isHobbySectionComplete = false;
+  let Header = false;
+  let Summary = false;
+  let Experience = false;
+  let Education = false;
+  let Skills = false;
+  let Certificate = false;
+  let Projects = false;
+  let Awards = false;
+  let Language = false;
+  let Hobby = false;
+
   if (resume.WorkExperience.length > 0) {
     resume.WorkExperience.map(
       ({ companyName, jobTitle, location, startDate, responsibilities }) => {
@@ -347,16 +351,16 @@ const resumeSectionCompletionStatusFromDB = async (id: string) => {
           location === workExperienceData.location ||
           responsibilities === workExperienceData.responsibilities
         ) {
-          isWorkExperienceSectionComplete = false;
+          Experience = false;
         } else if (
           companyName === null ||
           jobTitle === null ||
           location === null ||
           startDate === null
         ) {
-          isWorkExperienceSectionComplete = false;
+          Experience = false;
         } else {
-          isWorkExperienceSectionComplete = true;
+          Experience = true;
         }
       }
     );
@@ -369,11 +373,11 @@ const resumeSectionCompletionStatusFromDB = async (id: string) => {
         year === awardData.year ||
         description === awardData.description
       ) {
-        isAwardSectionComplete = false;
+        Awards = false;
       } else if (name === null || organization === null || year === null) {
-        isAwardSectionComplete = false;
+        Awards = false;
       } else {
-        isAwardSectionComplete = true;
+        Awards = true;
       }
     });
   }
@@ -385,11 +389,11 @@ const resumeSectionCompletionStatusFromDB = async (id: string) => {
         issueDate === certificationData.issueDate ||
         certificateLink === certificationData.certificateLink
       ) {
-        isCertificationSectionComplete = false;
+        Certificate = false;
       } else if (name === null || issuer === null || issueDate === null) {
-        isCertificationSectionComplete = false;
+        Certificate = false;
       } else {
-        isCertificationSectionComplete = true;
+        Certificate = true;
       }
     });
   }
@@ -404,16 +408,16 @@ const resumeSectionCompletionStatusFromDB = async (id: string) => {
         technologies === projectData.technologies ||
         description === projectData.description
       ) {
-        isProjectSectionComplete = false;
+        Projects = false;
       } else if (
         name === null ||
         link === null ||
         role === null ||
         technologies === null
       ) {
-        isProjectSectionComplete = false;
+        Projects = false;
       } else {
-        isProjectSectionComplete = true;
+        Projects = true;
       }
     });
   }
@@ -428,15 +432,15 @@ const resumeSectionCompletionStatusFromDB = async (id: string) => {
           (startDate === educationData.startDate &&
             endDate === educationData.endDate)
         ) {
-          isEducationSectionComplete = false;
+          Education = false;
         } else if (
           institution === null ||
           location === null ||
           degree === null
         ) {
-          isEducationSectionComplete = false;
+          Education = false;
         } else {
-          isEducationSectionComplete = true;
+          Education = true;
         }
       }
     );
@@ -444,11 +448,11 @@ const resumeSectionCompletionStatusFromDB = async (id: string) => {
   if (resume.Skill.length > 0) {
     resume.Skill.map(({ category, skills }) => {
       if (JSON.stringify(skills) === JSON.stringify(skillData.skills)) {
-        isSkillSectionComplete = false;
+        Skills = false;
       } else if (category === null || skills === null) {
-        isSkillSectionComplete = false;
+        Skills = false;
       } else {
-        isSkillSectionComplete = true;
+        Skills = true;
       }
     });
   }
@@ -473,7 +477,7 @@ const resumeSectionCompletionStatusFromDB = async (id: string) => {
       phone === resumeData.personalInfo.phone ||
       website === resumeData.personalInfo.website
     ) {
-      isHeaderSectionComplete = false;
+      Header = false;
     } else if (
       fullName === null ||
       email === null ||
@@ -484,49 +488,49 @@ const resumeSectionCompletionStatusFromDB = async (id: string) => {
       phone === null ||
       location === null
     ) {
-      isHeaderSectionComplete = false;
+      Header = false;
     } else {
-      isHeaderSectionComplete = true;
+      Header = true;
     }
   }
   if (resume.hobby) {
     if (JSON.stringify(resume.hobby) === JSON.stringify(resumeData.hobby)) {
-      isHobbySectionComplete = false;
+      Hobby = false;
     } else if (resume.hobby === null) {
-      isHobbySectionComplete = false;
+      Hobby = false;
     } else {
-      isHobbySectionComplete = true;
+      Hobby = true;
     }
   }
   if (resume.profileSummary) {
     if (resume.profileSummary === resumeData.profileSummary) {
-      isSummarySectionComplete = false;
+      Summary = false;
     } else if (resume.profileSummary === null) {
-      isSummarySectionComplete = false;
+      Summary = false;
     } else {
-      isSummarySectionComplete = true;
+      Summary = true;
     }
   }
   if (resume.language.length > 0) {
     resume.language.map(({ proficiency, name }) => {
       if (proficiency === null || name === null) {
-        isLanguageSectionComplete = false;
+        Language = false;
       } else {
-        isLanguageSectionComplete = true;
+        Language = true;
       }
     });
   }
   return {
-    isAwardSectionComplete,
-    isWorkExperienceSectionComplete,
-    isCertificationSectionComplete,
-    isProjectSectionComplete,
-    isSkillSectionComplete,
-    isEducationSectionComplete,
-    isSummarySectionComplete,
-    isHobbySectionComplete,
-    isHeaderSectionComplete,
-    isLanguageSectionComplete,
+    Header,
+    Summary,
+    Experience,
+    Skills,
+    Education,
+    Projects,
+    Certificate,
+    Awards,
+    Language,
+    Hobby,
   };
 };
 const getResumeFromDB = async (id: string, userId: string) => {

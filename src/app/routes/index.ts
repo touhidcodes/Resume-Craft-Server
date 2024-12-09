@@ -72,4 +72,3 @@ const moduleRoutes: { path: string; route: Router }[] = [
 moduleRoutes.forEach((route) => router.use(route.path, route.route));
 
 export default router;
-//   /resume/certification/all-certification/6751c7dbc9bf479f7c1d015d
