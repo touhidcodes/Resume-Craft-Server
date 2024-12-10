@@ -9,7 +9,7 @@ const router = express.Router();
 //login user route
 router.post(
   '/create-template',
-//   auth(UserRole.ADMIN),
+  auth(UserRole.ADMIN),
   validateRequest(CoverLetterTemplateSchema),
   coverLatterTemplateControllers.createCoverLatterTemplate
 );

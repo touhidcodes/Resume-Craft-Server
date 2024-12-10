@@ -33,7 +33,7 @@ const createAdmin = catchAsync(async (req, res) => {
   sendRes(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'User registered successfully',
+    message: 'User status change successfully',
     data: result,
   });
 });
@@ -53,7 +53,7 @@ const deleteUser = catchAsync(async (req, res) => {
   sendRes(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'User status change successfully',
+    message: 'User deleted successfully',
     data: result,
   });
 });
@@ -73,7 +73,7 @@ const getAllUser = catchAsync(async (req, res) => {
   return sendRes(res, {
     success: true,
     statusCode: httpStatus.OK,
-    message: 'User profile retrieved successfully',
+    message: 'User retrieved successfully',
     data: result,
   });
 });

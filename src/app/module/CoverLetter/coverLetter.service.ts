@@ -20,6 +20,27 @@ export const createCoverLetterIntoDB = async (
 
   return createdCoverLetter;
 };
+const createDuplicateCoverLetterIntoDB = async (
+  oldCoverLetterId: string,
+  userId: string
+) => {
+  await prisma.user.findUniqueOrThrow({
+    where: { id: userId },
+  });
+  const oldCoverLetter = await prisma.coverLetter.findUniqueOrThrow({
+    where: { id: oldCoverLetterId },
+  });
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { id, createdAt, updatedAt, ...coverLetterData } = oldCoverLetter;
+  await prisma.coverLetterTemplate.findUniqueOrThrow({
+    where: { id: oldCoverLetter.templateId },
+  });
+  const createdCoverLetter = await prisma.coverLetter.create({
+    data: { ...coverLetterData },
+  });
+
+  return createdCoverLetter;
+};
 const getCoverLatterFromDB = async (id: string, userId: string) => {
   const result = await prisma.coverLetter.findUniqueOrThrow({
     where: {
@@ -99,4 +120,5 @@ export const coverLetterServices = {
   getUserAllCoverLetterFromDB,
   updateCoverLetterIntoDB,
   deleteUserCoverLetterFromDB,
+  createDuplicateCoverLetterIntoDB,
 };

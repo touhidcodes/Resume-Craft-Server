@@ -30,6 +30,11 @@ router.post(
   validateRequest(CreateCoverLetterSchema),
   coverLetterControllers.createCoverLetter
 );
+router.post(
+    '/create-cover-letter-duplicate/:coverLetterId',
+    auth(UserRole.ADMIN, UserRole.USER),
+    coverLetterControllers.createDuplicateCoverLetter
+  );
 router.get(
   '/cover-letters',
   auth(UserRole.ADMIN, UserRole.USER),
