@@ -49,7 +49,7 @@ const deleteCoverLetterTemplateFromDB = async (id: string) => {
       isDeleted: false,
     },
   });
-  const result = await prisma.template.update({
+  const result = await prisma.coverLetterTemplate.update({
     where: {
       id,
     },

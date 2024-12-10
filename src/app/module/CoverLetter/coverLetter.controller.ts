@@ -28,7 +28,6 @@ const getCoverLetter = catchAsync(async (req, res) => {
   });
 });
 const getUserAllCoverLetter = catchAsync(async (req, res) => {
-  console.log(req.user);
   const result = await coverLetterServices.getUserAllCoverLetterFromDB(
     req.user.userId
   );
@@ -64,12 +63,23 @@ const deleteUserCoverLetterFromDB = catchAsync(async (req, res) => {
     data: result,
   });
 });
-
+const createDuplicateCoverLetter = catchAsync(async (req, res) => {
+  const result = await coverLetterServices.createDuplicateCoverLetterIntoDB(
+    req.params.coverLetterId,
+    req.user.userId
+  );
+  sendRes(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Resume Created successfully',
+    data: result,
+  });
+});
 export const coverLetterControllers = {
   createCoverLetter,
+  createDuplicateCoverLetter,
   getCoverLetter,
   getUserAllCoverLetter,
   updateCoverLetter,
   deleteUserCoverLetterFromDB,
-  //   deleteResume,
 };
