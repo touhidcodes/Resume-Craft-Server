@@ -1,8 +1,112 @@
-# Resume-Craft-Server
+# Resume-Craft-Server 🌟
 
-# Project Title
+Craft your future, one professional resume at a time with Resume Craft.
 
-Resume Craft a resume building platform. But you can also build cover letter form here. 
+
+## Table of Contents 📖
+
+- [About the Project](#about-the-project)
+- [Project Overview](#project-overview)
+- [Key Features](#key-features)
+- [Tech Stack](#tech-stack)
+- [Installation](#installation)
+- [Team Overview](#team-overview)
+- [Contributing](#contributing)
+- [License](#license)
+- [Contact](#contact)
+
+## About the Project 📃
+
+Resume Craft is your ultimate partner in building standout resumes effortlessly. This advanced yet user-friendly platform empowers individuals to create visually appealing, professional resumes tailored to their unique career aspirations. With an array of customizable templates and seamless functionality, Resume Craft transforms resume creation into a quick and enjoyable experience.
+
+Designed for both users and admins, the platform integrates smart features that simplify every step of the process, from design to delivery. Whether you're a job seeker striving for that perfect first impression or an admin managing applications, Resume Craft ensures a hassle-free, efficient journey to success.
+
+
+## Project Overview 📊
+
+Summarize the project objectives, key metrics, and any relevant statistics.
+
+- **Objective:** Build an advanced yet user-friendly online resume builder platform to empower individuals in creating professional, visually appealing resumes effortlessly.
+- **Target Audience:** Job seekers, students, and professionals across diverse industries.
+- **Key Metrics:**  
+  - Resume Creation Time: <5 minutes
+  - Template Customization Options: 5+
+  - User Satisfaction Rate: 95%
+  - Daily Active Users: 10+ 
+- **Deployment:** Hosted on Vercel with a CI/CD pipeline.
+  
+ 
+## Tech Stack 🛠️
+
+- **Frontend:** React.js, Next.js, TypeScript  
+- **Backend:** Node.js, Express.js  
+- **Database:** MongoDB, Prisma ORM  
+- **Authentication:** Firebase, JWT  
+- **Deployment:** Vercel  
+## Installation ⚙️
+
+Clone the repo and install dependencies:
+
+```bash
+git clone https://github.com/touhidcodes/Resume-Craft-Server.git
+cd Resume-Craft-Server
+npm install
+```
+
+Set up environment variables by creating a `.env` file in the root directory:
+
+```env
+DATABASE_URL=YOUR_DB_URL
+
+PORT=YOUR_PORT
+BCRYPT_SALT_ROUNDS=YOUR_BCRYPT_SALT
+JWT_ACCESS_TOKEN=YOUR_JWT_ACCESS_TOKEN
+JWT_REFRESH_TOKEN=YOUR_JWT_REFRESH_TOKEN
+JWT_ACCESS_EXPIRES_IN=YOUR_JWT_ACCESS_EXPIRES_IN
+JWT_REFRESH_EXPIRES_IN=YOUR_JWT_REFRESH_EXPIRES_IN
+```
+
+Run the application:
+
+```bash
+npm run dev
+```
+## Team Overview 👥
+
+Our team is a passionate group of innovators dedicated to building Resume Craft, combining our unique skills to deliver a seamless resume-building experience. 
+
+| Name            | Role                | Contributions                                        |  
+|---------------------|--------------------------|------------------------------------------------------------|  
+| Touhidur Zaman     | Team Leader & GitHub Manager | Led the team, managed GitHub repository, ensured project coordination. |  
+| MD Rifat           | Co-Leader & Backend Developer | Designed and implemented backend APIs and system architecture. |  
+| Imtiaz Tamim       | Backend Developer          | Contributed to API development and database management.     |  
+| Emon Ahmed         | Frontend Developer         | Built responsive UI components and optimized frontend performance. |  
+| Rakib Ahmed        | Frontend Developer         | Developed user-facing features and ensured cross-platform compatibility. |  
+| Nur Muhammad       | Frontend Developer         | Implemented core frontend functionality and styled components. |  
+
+## Contributing 🤝
+
+Contributions are what make the open-source community an amazing place! 
+
+### Steps to contribute:
+  - Fork the Project
+  - Create a branch (`git checkout -b feature/AmazingFeature`)
+  - Commit changes (`git commit -m 'Add some AmazingFeature'`)
+  - Push the branch (`git push origin feature/AmazingFeature`)
+  - Open a Pull Request
+
+## License 📜
+
+Distributed under the MIT License. See `LICENSE.txt` for more information.
+
+
+## Contact 📬
+
+**🔗 Live URL:** [Resume Craft](https://resume-craft-nine.vercel.app/)
+
+Touhidur Zaman - [@touhidcodes](https://www.linkedin.com/in/touhidur-zaman/) - touhidcodes@gmail.com  
+
+Project Link: [Resume Craft](https://github.com/touhidcodes/Resume-Craft)
 
 
 # API Reference
