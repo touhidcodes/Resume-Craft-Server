@@ -25,7 +25,7 @@ const getAllCoverLetterTemplateFromDB = async () => {
       { $sort: { count: -1 } },
     ],
   });
-  return Promise.all(
+  const allTemplateData = Promise.all(
     (
       popularTemplates as unknown as {
         _id: {
@@ -36,6 +36,11 @@ const getAllCoverLetterTemplateFromDB = async () => {
     ).map(async ({ _id, count }) => {
       const templateDetails = await prisma.coverLetterTemplate.findUnique({
         where: { id: _id.$oid, isDeleted: false },
+        select: {
+          id: true,
+          name: true,
+          image: true,
+        },
       });
 
       return {
@@ -43,6 +48,12 @@ const getAllCoverLetterTemplateFromDB = async () => {
         usageCount: count,
       };
     })
+  );
+
+  return (await allTemplateData).filter(
+    ({ id }) =>
+      // eslint-disable-next-line no-undefined
+      id !== undefined
   );
 };
 

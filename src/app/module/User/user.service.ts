@@ -12,6 +12,7 @@ const createUserByGoogleIntoBD = async (userData: User) => {
   const isUserExist = await prisma.user.findFirst({
     where: {
       OR: [{ email: userData.email }, { userName: userData.userName }],
+      status: UserStatus.ACTIVE,
     },
     select: {
       id: true,
@@ -24,6 +25,7 @@ const createUserByGoogleIntoBD = async (userData: User) => {
       city: true,
       createdAt: true,
       updatedAt: true,
+      password: false,
     },
   });
   if (!isUserExist) {

@@ -21,7 +21,7 @@ const getAllTemplateFromDB = async () => {
       { $sort: { count: -1 } },
     ],
   });
-  return Promise.all(
+  const allTemplateData = Promise.all(
     (
       popularTemplates as unknown as {
         _id: {
@@ -32,6 +32,11 @@ const getAllTemplateFromDB = async () => {
     ).map(async ({ _id, count }) => {
       const templateDetails = await prisma.template.findUnique({
         where: { id: _id.$oid, isDeleted: false },
+        select: {
+          id: true,
+          name: true,
+          image: true,
+        },
       });
 
       return {
@@ -39,6 +44,12 @@ const getAllTemplateFromDB = async () => {
         usageCount: count,
       };
     })
+  );
+
+  return (await allTemplateData).filter(
+    ({ id }) =>
+      // eslint-disable-next-line no-undefined
+      id !== undefined
   );
 };
 const deleteTemplateFromDB = async (id: string) => {
