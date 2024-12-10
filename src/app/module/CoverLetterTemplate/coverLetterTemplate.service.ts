@@ -19,41 +19,26 @@ const getACoverLetterTemplateFromDB = async (id: string) => {
   return result;
 };
 const getAllCoverLetterTemplateFromDB = async () => {
-  const popularTemplates = await prisma.coverLetter.aggregateRaw({
-    pipeline: [
-      { $group: { _id: '$templateId', count: { $sum: 1 } } },
-      { $sort: { count: -1 } },
-    ],
+  const templates = await prisma.coverLetterTemplate.findMany({
+    where: { isDeleted: false },
   });
-  const allTemplateData = Promise.all(
-    (
-      popularTemplates as unknown as {
-        _id: {
-          $oid: string;
+  return Promise.all(
+    templates.map(
+      async ({ id, image, name, isDeleted, createdAt, updatedAt }) => {
+        const usageCount = await prisma.coverLetter.count({
+          where: { templateId: id },
+        });
+        return {
+          id,
+          image,
+          name,
+          isDeleted,
+          createdAt,
+          updatedAt,
+          usageCount,
         };
-        count: number;
-      }[]
-    ).map(async ({ _id, count }) => {
-      const templateDetails = await prisma.coverLetterTemplate.findUnique({
-        where: { id: _id.$oid, isDeleted: false },
-        select: {
-          id: true,
-          name: true,
-          image: true,
-        },
-      });
-
-      return {
-        ...templateDetails,
-        usageCount: count,
-      };
-    })
-  );
-
-  return (await allTemplateData).filter(
-    ({ id }) =>
-      // eslint-disable-next-line no-undefined
-      id !== undefined
+      }
+    )
   );
 };
 
