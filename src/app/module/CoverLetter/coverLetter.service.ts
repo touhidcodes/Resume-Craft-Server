@@ -1,5 +1,3 @@
-// import { coverLetterData } from './coverLetter.demoData';
-
 import { prisma } from '../../../app';
 import { JwtPayload } from 'jsonwebtoken';
 import { CoverLetter } from '@prisma/client';
