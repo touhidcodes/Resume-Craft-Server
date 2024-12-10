@@ -103,6 +103,7 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 ## Contact 📬
 
 **🔗 Live URL:** [Resume Craft](https://resume-craft-nine.vercel.app/)
+**🔗 Server URL:** [Resume Craft Server](https://resume-craft-api.vercel.app/)
 
 Touhidur Zaman - [@touhidcodes](https://www.linkedin.com/in/touhidur-zaman/) - touhidcodes@gmail.com  
 
